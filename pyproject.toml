@@ -1,11 +1,10 @@
 [project]
 name = "PBI_dashboard_creator"
-version = "1.0.3"
+version = "1.0.4"
 authors = [
   { name="Russell Shean", email="russshean@gmail.com" },
 ]
 description = "Automatically create PowerBI dashboards using the .pbir file type"
-dependencies =["os", "pathlib", "uuid", "importlib", "shutil"]
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
