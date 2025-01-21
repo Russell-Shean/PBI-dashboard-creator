@@ -166,11 +166,11 @@ def add_csv(dashboard_path, data_path):
 				dataset[col] = pd.to_datetime(dataset[col], format = "%Y-%m-%d")
 
 				# create a date heirarchy table
-				file_id = create_date_hr(col_name = col, 
-					dataset_name = dataset_name, 
-					report_name = report_name,
-					 dashboard_path = dashboard_path )
-				break
+				#file_id = create_date_hr(col_name = col, 
+				#	dataset_name = dataset_name, 
+				#	report_name = report_name,
+			#		 dashboard_path = dashboard_path )
+			#	break
 
 		# add the column's name to a set for later
 		col_names.append(col)
