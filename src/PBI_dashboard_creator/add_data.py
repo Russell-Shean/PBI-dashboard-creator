@@ -230,24 +230,27 @@ def add_csv(dashboard_path, data_path):
 				file.write(f'\t\tlineageTag: {col_id}\n')
 				file.write('\t\tsummarizeBy: none\n')
 				file.write(f'\t\tsourceColumn: {col}\n\n')
-				file.write(f'\t\tvariation Variation\n')
-				file.write('\t\t\tisDefault\n')
-				file.write(f'\t\t\trelationship: {relationship_id}\n')
-				file.write(f"\t\t\tdefaultHierarchy: LocalDateTable_{file_id}.'Date Hierarchy'\n\n")
+
+				# this is only needed if you want automatic date heirarchies
+				# at some point I may add that as an option to the create dashboard function.....
+				#file.write(f'\t\tvariation Variation\n')
+				#file.write('\t\t\tisDefault\n')
+				#file.write(f'\t\t\trelationship: {relationship_id}\n')
+				#file.write(f"\t\t\tdefaultHierarchy: LocalDateTable_{file_id}.'Date Hierarchy'\n\n")
 				file.write('\t\tannotation SummarizationSetBy = Automatic\n\n')
 				file.write('\t\tannotation UnderlyingDateTimeDataType = Date\n\n')
 
 
 			# create a new file to define the relationship
-			with open(relationships_path, "a") as file:
-				file.write(f'relationship {relationship_id}\n')
-				file.write(f'\tjoinOnDateBehavior: datePartOnly\n')
-				file.write(f'\tfromColumn: {dataset_name}.{col}\n')
-				file.write(f'\ttoColumn: LocalDateTable_{file_id}.Date\n\n')
+			#with open(relationships_path, "a") as file:
+			#	file.write(f'relationship {relationship_id}\n')
+			#	file.write(f'\tjoinOnDateBehavior: datePartOnly\n')
+			#	file.write(f'\tfromColumn: {dataset_name}.{col}\n')
+			#	file.write(f'\ttoColumn: LocalDateTable_{file_id}.Date\n\n')
 
 			# Append the date table to the model.tmdl file
-			with open(model_path, "a") as file:
-				file.write(f'\nref table LocalDateTable_{file_id}')
+			#with open(model_path, "a") as file:
+			#	file.write(f'\nref table LocalDateTable_{file_id}')
 
 
 

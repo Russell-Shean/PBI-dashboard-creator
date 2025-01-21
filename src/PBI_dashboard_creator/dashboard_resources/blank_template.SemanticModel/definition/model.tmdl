@@ -10,7 +10,8 @@ annotation PBI_ProTooling = ["DevMode"]
 
 annotation PBIDesktopVersion = 2.137.952.0 (24.10)
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+///Set this to 1 to turn back on automatic date heirarchies
+annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_QueryOrder = []
 
