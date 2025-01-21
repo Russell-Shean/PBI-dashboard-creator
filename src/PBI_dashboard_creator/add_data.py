@@ -1,5 +1,5 @@
 import pandas as pd
-import os, uuid, json
+import os, uuid, json, re, shutil
 
 # Import a custom function to create the date heirarchies
 import PBI_dashboard_creator.create_date_hrcy as PBI_date_hr
@@ -30,6 +30,8 @@ def add_csv(dashboard_path, data_path):
 	semantic_model_folder = os.path.join(dashboard_path, f'{report_name}.SemanticModel' )
 	definitions_folder = os.path.join(semantic_model_folder, "definition")
 	model_path = os.path.join(definitions_folder, 'model.tmdl')
+	temp_model_path = os.path.join(dashboard_path, 'model2.tmdl')
+
 	relationships_path = os.path.join(definitions_folder, "relationships.tmdl")
 	diagram_layout_path = os.path.join(semantic_model_folder, 'diagramLayout.json')
 
@@ -48,7 +50,7 @@ def add_csv(dashboard_path, data_path):
 
 
 
-		# add dataset to diagramLayout file ---------------------------------------------------------------------
+	# add dataset to diagramLayout file ---------------------------------------------------------------------
 	with open(diagram_layout_path,'r') as file:
 		diagram_layout = json.load(file)
 
@@ -60,7 +62,7 @@ def add_csv(dashboard_path, data_path):
             "x": 0,
             "y": 0
           },
-          "nodeIndex": "colony",
+          "nodeIndex": dataset_name,
           "nodeLineageTag": dataset_id,
           "size": {
             "height": 300,
@@ -80,9 +82,36 @@ def add_csv(dashboard_path, data_path):
 
 
 	# modify model.tdml file -------------------------------------------------------------------------------------
-	with open(model_path, 'a') as file:
-		file.write(f'annotation PBI_QueryOrder = [{dataset_name}]\n\nref table {dataset_name}')
+	with open(temp_model_path, 'w') as tmp:
+		with open(model_path, "r") as file:
+			for line in file.readlines():
 
+				# check to see if the line is the one we want
+				m = re.search("(?<=annotation PBI_QueryOrder = ).*", line)
+
+				# if it is, read the list of datasets and append a new one in
+
+				if m is not None:
+					# execute the tmdl code to make a python list
+
+					# execute the code (including local and global scopes)
+					# source: https://stackoverflow.com/questions/41100196/exec-not-working-inside-function-python3-x
+					exec(f'query_order_list = {m.group(0)}', locals(), globals())
+
+					# add the dataset using python method then write back  to line
+					query_order_list.append(dataset_name)
+					line = f'annotation PBI_QueryOrder = {query_order_list}\n'
+
+					# write back the line to a temporary file
+
+				tmp.write(line)
+
+			# append the dataset name at the end of the file
+			tmp.write(f"\n\nref table {dataset_name}")
+
+
+  # Replace the model file with the temp file we created
+	shutil.move(temp_model_path, model_path)
 
 
 	# Data model file --------------------------------------------------------------------------
@@ -111,7 +140,7 @@ def add_csv(dashboard_path, data_path):
 				dataset[col] = pd.to_datetime(dataset[col], format = "%Y-%m-%d")
 
 				# create a date heirarchy table
-				file_id = create_date_hr(col_name = col,
+				file_id = PBI_date_hr.create_date_hr(col_name = col,
 				 dataset_name = dataset_name,
 				  report_name = report_name, 
 				  dashboard_path = dashboard_path )
@@ -150,21 +179,27 @@ def add_csv(dashboard_path, data_path):
 
 		col_id = str(uuid.uuid4())
 
+
+    # For numbers, we're not distinguishing between integers (int64)
+    # and numbers (double)
 		if dataset[col].dtype == "int64" or dataset[col].dtype == "float64":
 
 			# record more details in a different set
-			col_deets.append(f'{{"{col}", Int64.Type}}')
+			col_deets.append(f'{{"{col}", type number}}')
 
 
 			with open(dataset_file_path, 'a') as file:
 				file.write(f'\tcolumn {col}\n')
-				file.write('\t\tdataType: int64\n')
-				file.write('\t\tformatString: 0\n')
+				file.write('\t\tdataType: double\n')
+				#file.write('\t\tformatString: 0\n')
 				file.write(f'\t\tlineageTag: {col_id}\n')
 				file.write('\t\tsummarizeBy: sum\n')
 				file.write(f'\t\tsourceColumn: {col}\n\n')
 				file.write('\t\tannotation SummarizationSetBy = Automatic\n\n')
+				file.write('\t\tannotation PBI_FormatHint = {"isGeneralNumber":true}\n\n')
 
+
+    # strings ------------------------------------------------
 		if dataset[col].dtype == "object":
 
 			# record more details in a different set
@@ -178,7 +213,8 @@ def add_csv(dashboard_path, data_path):
 				file.write(f'\t\tsourceColumn: {col}\n\n')
 				file.write('\t\tannotation SummarizationSetBy = Automatic\n\n')
 
-
+ 
+ 		# dates ----------------------------------------------
 		if dataset[col].dtype == "datetime64[ns]":
 
 			# create a relationship id
@@ -209,6 +245,10 @@ def add_csv(dashboard_path, data_path):
 				file.write(f'\tfromColumn: {dataset_name}.{col}\n')
 				file.write(f'\ttoColumn: LocalDateTable_{file_id}.Date\n\n')
 
+			# Append the date table to the model.tmdl file
+			with open(model_path, "a") as file:
+				file.write(f'\nref table LocalDateTable_{file_id}')
+
 
 
 
@@ -219,19 +259,12 @@ def add_csv(dashboard_path, data_path):
 	with open(dataset_file_path, 'a') as file:
 		file.write(f'\tpartition {dataset_name} = m\n')
 		file.write('\t\tmode: import\n\t\tsource =\n\t\t\t\tlet\n')
-		file.write(f'\t\t\t\t\tSource = Csv.Document(File.Contents("{data_path_reversed}"),[Delimiter=",", Columns=10, Encoding=1252, QuoteStyle=QuoteStyle.None]),\n')
+		file.write(f'\t\t\t\t\tSource = Csv.Document(File.Contents("{data_path_reversed}"),[Delimiter=",", Columns={len(dataset.columns)}, Encoding=1252, QuoteStyle=QuoteStyle.None]),\n')
 		file.write('\t\t\t\t\t#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),\n')
 		file.write(f'\t\t\t\t\t#"Replaced Value" = Table.ReplaceValue(#"Promoted Headers","NA",null,Replacer.ReplaceValue,{{\"{'", "'.join(col_names)}\"}}),\n')
 		file.write(f'\t\t\t\t\t#"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{{', '.join(map(str, col_deets))}}})\n')
 		file.write('\t\t\t\tin\n\t\t\t\t\t#"Changed Type"\n\n')
 		file.write('\tannotation PBI_ResultType = Table\n\n\tannotation PBI_NavigationStepName = Navigation\n\n')
-
-
-
-
-
-
-
 
 
 
