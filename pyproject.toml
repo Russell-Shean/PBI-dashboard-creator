@@ -1,6 +1,6 @@
 [project]
 name = "PBI_dashboard_creator"
-version = "1.0.26"
+version = "1.0.27"
 authors = [
   { name="Russell Shean", email="russshean@gmail.com" },
 ]
@@ -13,6 +13,17 @@ classifiers = [
 ]
 license = "GPL-3.0-or-later"
 license-files = ["LICEN[CS]E*"]
+
+dependencies = [
+"importlib",
+"json",
+"os",
+"pandas",
+"pathlib",
+"re",
+"shutil",
+"uuid",  
+]
 
 [project.urls]
 Homepage = "https://github.com/Russell-Shean/PBI-dashboard-creator"
