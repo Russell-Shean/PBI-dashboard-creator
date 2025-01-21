@@ -134,7 +134,7 @@ def add_csv(dashboard_path, data_path):
 			m = re.search("^\d{4}-\d{2}-\d{2}$", str(value))
 
 			if m is not None:
-				print(f"{col}: This column is probably a date!")
+				#print(f"{col}: This column is probably a date!")
 
 				# change the data type in the panda dataframe
 				dataset[col] = pd.to_datetime(dataset[col], format = "%Y-%m-%d")
