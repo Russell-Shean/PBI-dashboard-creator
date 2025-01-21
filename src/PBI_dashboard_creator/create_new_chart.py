@@ -193,25 +193,3 @@ def add_chart(dashboard_path,
 		json.dump(chart_json, file, indent = 2)
 
 
-report_name = "blorg"
-report_location = f"C:/Users/rps1303/PBI_projects/test_dash"
-
-dashboard_path = f"{report_location}/{report_name}"
-
-
-
-add_chart(dashboard_path = dashboard_path, 
-	      page_id = "page2", 
-	      chart_id = "colonies_lost_by_year", 
-	      chart_type = "columnChart",
-	      data_source = "colony",
-	      chart_title = "Number of Bee Colonies Lost per Year",
-	      x_axis_title = "Year",
-	      y_axis_title = "Number of Colonies",
-	      x_axis_var = "year",
-	      y_axis_var = "colony_lost",
-	      y_axis_var_aggregation_type = "Sum",
-	      x_position = 20,
-	      y_position = 60,
-	      height = 524,
-	      width = 603)
