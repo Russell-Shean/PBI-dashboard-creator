@@ -20,6 +20,29 @@ def add_chart(dashboard_path,
               height, 
               width ):
 
+'''
+This function adds a new chart to a page in a power BI dashboard report. 
+
+   :param str chart_type: The type of chart to build on the page. Known available types include: ["columnChart","barChart", "clusteredBarChart", ]
+   :param str dashboard_path: 
+
+
+
+
+   :param str recipient: The recipient of the message
+   :param str message_body: The body of the message
+   :param priority: The priority of the message, can be a number 1-5
+   :type priority: integer or None
+   :return: the message id
+   :rtype: int
+   :raises ValueError: if the message_body exceeds 160 characters
+   :raises TypeError: if the message_body is not a basestring
+
+
+
+
+'''
+
 
 	# file paths -------------------------------
 	report_name = os.path.basename(dashboard_path)

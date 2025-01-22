@@ -4,6 +4,9 @@ import os, uuid, json, re, shutil
 # Import a custom function to create the date heirarchies
 import PBI_dashboard_creator.create_date_hrcy as PBI_date_hr
 
+# Import function to update the model.tmdl file
+import PBI_dashboard_creator.update_model_file as PBI_model              # internal function to add data to model.tmdl
+import PBI_dashboard_creator.update_diagramLayout as PBI_DL
 
 def add_csv(dashboard_path, data_path):
 
@@ -16,7 +19,7 @@ def add_csv(dashboard_path, data_path):
 	split_end = os.path.splitext(path_end)
 
 	dataset_name = split_end[0]
-	dataset_extension =split_end[1]
+	dataset_extension = split_end[1]
 
 
 	report_name = os.path.basename(dashboard_path)
@@ -51,67 +54,72 @@ def add_csv(dashboard_path, data_path):
 
 
 	# add dataset to diagramLayout file ---------------------------------------------------------------------
-	with open(diagram_layout_path,'r') as file:
-		diagram_layout = json.load(file)
+	PBI_DL.update_diagramLayout(dashboard_path = dashboard_path, dateset_name = dataset_name, dataset_id = dataset_id)
+
+	#with open(diagram_layout_path,'r') as file:
+	#	diagram_layout = json.load(file)
 
 
 	# add all this junk to describe the table's "nodes"
-	diagram_layout["diagrams"][0]["nodes"].append( 
-        {
-          "location": {
-            "x": 0,
-            "y": 0
-          },
-          "nodeIndex": dataset_name,
-          "nodeLineageTag": dataset_id,
-          "size": {
-            "height": 300,
-            "width": 234
-          },
-          "zIndex": 0
-        }
-      )
+	#diagram_layout["diagrams"][0]["nodes"].append( 
+   #     {
+     #     "location": {
+     #       "x": 0,
+    #        "y": 0
+   #       },
+   #       "nodeIndex": dataset_name,
+   #       "nodeLineageTag": dataset_id,
+    #      "size": {
+     #       "height": 300,
+    #        "width": 234
+    #      },
+    #      "zIndex": 0
+   #     }
+   #   )
 
    
 	# write to file
-	with open(diagram_layout_path,'w') as file:
-		json.dump(diagram_layout, file, indent = 2)
+	#with open(diagram_layout_path,'w') as file:
+	#	json.dump(diagram_layout, file, indent = 2)
 
 
 
 
 
 	# modify model.tdml file -------------------------------------------------------------------------------------
-	with open(temp_model_path, 'w') as tmp:
-		with open(model_path, "r") as file:
-			for line in file.readlines():
+	#with open(temp_model_path, 'w') as tmp:
+		#with open(model_path, "r") as file:
+			#for line in file.readlines():
 
 				# check to see if the line is the one we want
-				m = re.search("(?<=annotation PBI_QueryOrder = ).*", line)
+				#m = re.search("(?<=annotation PBI_QueryOrder = ).*", line)
 
 				# if it is, read the list of datasets and append a new one in
 
-				if m is not None:
+				#if m is not None:
 					# execute the tmdl code to make a python list
 
 					# execute the code (including local and global scopes)
 					# source: https://stackoverflow.com/questions/41100196/exec-not-working-inside-function-python3-x
-					exec(f'query_order_list = {m.group(0)}', locals(), globals())
+					#exec(f'query_order_list = {m.group(0)}', locals(), globals())
 
 					# add the dataset using python method then write back  to line
-					query_order_list.append(dataset_name)
-					line = f'annotation PBI_QueryOrder = {query_order_list}\n'
+					#query_order_list.append(dataset_name)
+					#line = f'annotation PBI_QueryOrder = {query_order_list}\n'
 
 					# write back the line to a temporary file
 
-				tmp.write(line)
+				#tmp.write(line)
 
 			# append the dataset name at the end of the file
-			tmp.write(f"\n\nref table {dataset_name}")
+			#tmp.write(f"\n\nref table {dataset_name}")
 
 
   # Replace the model file with the temp file we created
-	shutil.move(temp_model_path, model_path)
+	#shutil.move(temp_model_path, model_path)
+
+  # Call a function to update the model file with the dataset
+	PBI_model.update_model_file(dashboard_path = dashboard_path, dataset_name = dataset_name)
 
 
 	# Data model file --------------------------------------------------------------------------
