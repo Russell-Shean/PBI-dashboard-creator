@@ -1,5 +1,5 @@
 # modify modil tmdl
-import re, shutil
+import re, shutil, os
 
 def update_model_file(dashboard_path, dataset_name):
 

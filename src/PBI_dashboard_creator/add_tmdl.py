@@ -18,8 +18,9 @@ def add_tmdl_dataset(dashboard_path, tmdl_file_path):
 	report_name = os.path.basename(dashboard_path)
 
 	semantic_model_folder = os.path.join(dashboard_path, f'{report_name}.SemanticModel' )
+	definitions_folder = os.path.join(semantic_model_folder, "definition")
 	tables_folder = os.path.join(definitions_folder, 'tables')
-	tmdl_dataset_path = os.path.join(tables_folder, os.basename(tmdl_file_path))
+	tmdl_dataset_path = os.path.join(tables_folder, os.path.basename(tmdl_file_path))
 
 
 	# dateset_name ----------------------------------------------------------------------------------------
@@ -53,7 +54,7 @@ def add_tmdl_dataset(dashboard_path, tmdl_file_path):
 
 
 	# update the diagramLayout file to include the new date table\
-	PBI_DL.update_diagramLayout(dashboard_path = dashboard_path, dateset_name = dataset_name, dataset_id = dataset_id)
+	PBI_DL.update_diagramLayout(dashboard_path = dashboard_path, dataset_name = dataset_name, dataset_id = dataset_id)
 
 	# update the model.tmdl file to include the new datetable
 	PBI_model.update_model_file(dashboard_path = dashboard_path, dataset_name = dataset_name)
@@ -67,4 +68,4 @@ def add_tmdl_dataset(dashboard_path, tmdl_file_path):
 
 
 
-#add_custom_date_hr(dashboard_path = "C:/Users/rps1303/PBI_projects/blorg", tmdl_file_path = "C:/Users/rps1303/PBI_projects/test_dash/blorg/blorg.SemanticModel/definition/tables/DateTable.tmdl")
+add_tmdl_dataset(dashboard_path = "C:/Users/rps1303/PBI_projects/blorg", tmdl_file_path = "C:/Users/rps1303/PBI_projects/test_dash/blorg/blorg.SemanticModel/definition/tables/DateTable.tmdl")
