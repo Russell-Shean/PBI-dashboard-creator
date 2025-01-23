@@ -37,7 +37,8 @@ def add_new_page(dashboard_path, page_name):
 	                  "displayName": page_name,
 	                  "displayOption": "FitToPage",
 	                  "height": 720,
-	                  "width": 1280}
+	                  "width": 1280,
+					  "objects":{}}
 
 	# write to file
 	with open(new_page_json_path, "w") as file:

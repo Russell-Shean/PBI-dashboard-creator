@@ -38,7 +38,7 @@ def add_chart(dashboard_path,
   :rtype: int
   :raises ValueError: if the message_body exceeds 160 characters
   :raises TypeError: if the message_body is not a basestring
-  
+
   '''
 
   # file paths -------------------------------
@@ -60,26 +60,20 @@ def add_chart(dashboard_path,
 	# checks ---------------------------------------------------------
 
 	# page exists? 
-	if os.path.isdir(page_folder_path) is not True:
-		raise NameError(f"Couldn't find the page folder at {page_folder_path}")
+  if os.path.isdir(page_folder_path) is not True:
+    raise NameError(f"Couldn't find the page folder at {page_folder_path}")
 
 	# chart id unique? 
-	if os.path.isdir(new_visual_folder) is True:
-		raise ValueError(f'A visual with that chart_id already exists! Try using a different chart_id')
+  if os.path.isdir(new_visual_folder) is True:
+    raise ValueError(f'A visual with that chart_id already exists! Try using a different chart_id')
 
-	else: 
-		os.makedirs(new_visual_folder)
-
-
-
-
-
-	#glob.glob(dashboard_path)
+  else: 
+    os.makedirs(new_visual_folder)
 
 
 
 	# define the json for the new chart
-	chart_json = {
+  chart_json = {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
   "name": chart_id,
   "position": {
@@ -209,7 +203,7 @@ def add_chart(dashboard_path,
 }
 
 	# Write out the new json 
-	with open(visual_json_path, "w") as file:
-		json.dump(chart_json, file, indent = 2)
+  with open(visual_json_path, "w") as file:
+    json.dump(chart_json, file, indent = 2)
 
 
