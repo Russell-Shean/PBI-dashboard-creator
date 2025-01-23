@@ -1,5 +1,5 @@
 
-import json, 
+import json, os
 
 def update_diagramLayout(dashboard_path, dataset_name, dataset_id):
 
