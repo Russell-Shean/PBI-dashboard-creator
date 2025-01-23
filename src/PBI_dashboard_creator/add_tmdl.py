@@ -48,13 +48,14 @@ def add_tmdl_dataset(dashboard_path, data_path = None, add_default_datetable = T
 		dataset_name = "DataTable"
 		
 
-		data_path = str(resources.files("PBI_dashboard_creator.dashboard_resources.python_resources").joinpath("DataTable.tmdl"))
-		
-		print(data_path)
+		data_path = str(resources.files("PBI_dashboard_creator.dashboard_resources.python_resources").joinpath("DateTable.tmdl"))
+
+
+		# copy date table from package resources to table folder
 		shutil.copy(data_path, tmdl_dataset_path)
 
 		# change the data_path to be the newly copied file
-		#data_path = tmdl_dataset_path
+		data_path = tmdl_dataset_path
 
 	else:
 		# define the path we'll move the table to
@@ -105,8 +106,3 @@ def add_tmdl_dataset(dashboard_path, data_path = None, add_default_datetable = T
 
 
 
-
-
-
-#add_tmdl_dataset(dashboard_path = "C:/Users/rps1303/PBI_projects/blorg", data_path = "C:/Users/rps1303/PBI_projects/test_dash/blorg/blorg.SemanticModel/definition/tables/DateTable.tmdl")
-#add_tmdl_dataset(dashboard_path = "C:/Users/rps1303/PBI_projects/blorg", data_path = None, add_default_datetable = True)
