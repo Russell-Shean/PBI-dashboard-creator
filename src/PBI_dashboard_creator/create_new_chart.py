@@ -38,22 +38,18 @@ def add_chart(dashboard_path,
   :rtype: int
   :raises ValueError: if the message_body exceeds 160 characters
   :raises TypeError: if the message_body is not a basestring
-
-
-
-
+  
   '''
 
+  # file paths -------------------------------
+  report_name = os.path.basename(dashboard_path)
 
-	# file paths -------------------------------
-	report_name = os.path.basename(dashboard_path)
+  pages_folder = os.path.join(dashboard_path, f'{report_name}.Report/definition/pages')
+  page_folder_path = os.path.join(pages_folder, page_id)
 
-	pages_folder = os.path.join(dashboard_path, f'{report_name}.Report/definition/pages')
-	page_folder_path = os.path.join(pages_folder, page_id)
-
-	visuals_folder = os.path.join(page_folder_path, "visuals")
-	new_visual_folder = os.path.join(visuals_folder, chart_id)
-	visual_json_path = os.path.join(new_visual_folder, "visual.json")
+  visuals_folder = os.path.join(page_folder_path, "visuals")
+  new_visual_folder = os.path.join(visuals_folder, chart_id)
+  visual_json_path = os.path.join(new_visual_folder, "visual.json")
 
 
 

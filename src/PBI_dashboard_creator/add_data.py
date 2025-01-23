@@ -54,7 +54,7 @@ def add_csv(dashboard_path, data_path):
 
 
 	# add dataset to diagramLayout file ---------------------------------------------------------------------
-	PBI_DL.update_diagramLayout(dashboard_path = dashboard_path, dateset_name = dataset_name, dataset_id = dataset_id)
+	PBI_DL.update_diagramLayout(dashboard_path = dashboard_path, dataset_name = dataset_name, dataset_id = dataset_id)
 
 	#with open(diagram_layout_path,'r') as file:
 	#	diagram_layout = json.load(file)
