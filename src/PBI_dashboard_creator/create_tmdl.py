@@ -20,7 +20,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 
 
 	# remove unnamed columns from dataset
-	dataset = dataset.loc[:, ~dataset.columns.str.contains('^Unnamed')]
+	dataset = dataset.loc[:, ~.columns.str.contains('^Unnamed')]
 
 
 
@@ -97,7 +97,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 
 
 			with open(dataset_file_path, 'a') as file:
-				file.write(f'\tcolumn {col}\n')
+				file.write(f"\tcolumn '{col}'\n")
 				file.write('\t\tdataType: double\n')
 				#file.write('\t\tformatString: 0\n')
 				file.write(f'\t\tlineageTag: {col_id}\n')
@@ -114,7 +114,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 			col_deets.append(f'{{"{col}", type text}}')
 
 			with open(dataset_file_path, 'a') as file:
-				file.write(f'\tcolumn {col}\n')
+				file.write(f"\tcolumn '{col}'\n")
 				file.write('\t\tdataType: string\n')
 				file.write(f'\t\tlineageTag: {col_id}\n')
 				file.write('\t\tsummarizeBy: none\n')
@@ -132,7 +132,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 			col_deets.append(f'{{"{col}", type date}}')
 
 			with open(dataset_file_path, 'a') as file:
-				file.write(f'\tcolumn {col}\n')
+				file.write(f"\tcolumn '{col}'\n")
 				file.write(f'\t\tdataType: dateTime\n')
 				file.write(f'\t\tformatString: Long Date\n')
 				file.write(f'\t\tlineageTag: {col_id}\n')
