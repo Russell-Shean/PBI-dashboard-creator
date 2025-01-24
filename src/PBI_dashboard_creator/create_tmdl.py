@@ -37,12 +37,6 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 
 	for col in dataset:
 
-		# convert unnambed columns back to "", but only for m code not tmdl code
-		# Great example of why Microsoft is awful :D
-		if col == "probably_an_index_column":
-			col_for_m = ""
-		else:
-			col_for_m = col
 
 		# Loop through the dataset and find dates
 		for value in dataset[col][0:100]:
@@ -69,6 +63,13 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
   # loop through columns and write specs out to model file
 	for col in dataset:
 
+		# convert unnambed columns back to "", but only for m code not tmdl code
+		# Great example of why Microsoft is awful :D
+		if col == "probably_an_index_column":
+			col_for_m = ""
+		else:
+			col_for_m = col
+
 		# loop through the values in a column to see if it contains dates
 		# Loop through the dataset and find dates
 		for value in dataset[col][0:100]:
@@ -85,7 +86,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 				#	dataset_name = dataset_name, 
 				#	report_name = report_name,
 			#		 dashboard_path = dashboard_path )
-			#	break
+			#=	break
 
 		# add the column's name to a set for later
 		col_names.append(col)
