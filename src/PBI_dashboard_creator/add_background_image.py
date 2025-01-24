@@ -1,7 +1,7 @@
 #background_image
 import os, shutil, json
 
-def add_background_img(dashboard_path, page_id, img_path, alpha, scaling_method = "Fit"):
+def add_background_img(dashboard_path, page_id, img_path, alpha = 100, scaling_method = "Fit"):
 
 	'''
 
@@ -9,10 +9,10 @@ def add_background_img(dashboard_path, page_id, img_path, alpha, scaling_method 
 
 	'''
 
-	if typ(alpha) is not int:
+	if type(alpha) is not int:
 		raise TypeError("alpha (the transparency value) must be an integer between 1-100")
 
-	if alpha is > 100 or < 0:
+	if (alpha > 100) or (alpha < 0):
 		raise ValueError("alpha (the transparency value) must be an integer between 1-100")
 
 	# file paths
@@ -76,9 +76,7 @@ def add_background_img(dashboard_path, page_id, img_path, alpha, scaling_method 
 
 
 	# add the image to the page's json
-	page_json["objects"].update(
-
-		    "background": [
+	page_json["objects"]["background"] = [
       {
         "properties": {
           "image": {
@@ -119,8 +117,6 @@ def add_background_img(dashboard_path, page_id, img_path, alpha, scaling_method 
       }
     ]
 
-
-		)
 	
 
 	
@@ -145,4 +141,3 @@ report_location = f"C:/Users/rps1303/PBI_projects"
 
 dashboard_path = f"{report_location}/{report_name}"
 
-add_background_img(dashboard_path = dashboard_path, page_id = "page2", img_path = "C:/Users/rps1303/Downloads/Taipei_skyline_at_sunset_20150607.jpg", alpha = 100)
