@@ -1,7 +1,7 @@
 import os, re, uuid
 import pandas as pd
 
-def create_tmdl(dashboard_path = dashboard_path, dataset_name = dataset_name, dataset_id = dataset_id, dataset = dataset):
+def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 
 
 	# file paths ---------------------------------------------------------------------------
