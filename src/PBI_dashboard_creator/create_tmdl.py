@@ -14,6 +14,10 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 	tables_folder = os.path.join(definitions_folder, 'tables')
 	dataset_file_path = os.path.join(tables_folder, f'{dataset_name}.tmdl')
 
+	# create a tables folder if it doesn't already exist
+	if not os.path.exists(tables_folder):
+		os.makedirs(tables_folder)
+
 
 
 	# sink inital header stuff about dataset
