@@ -19,8 +19,8 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 		os.makedirs(tables_folder)
 
 
-	# remove unnamed columns from dataset
-	dataset = dataset.loc[:, ~dataset.columns.str.contains('^Unnamed')]
+	# rename unnamed columns in dataset
+	dataset.rename( columns={'Unnamed: 0':'probably_an_index_column'}, inplace=True )
 
 
 
