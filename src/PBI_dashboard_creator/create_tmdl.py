@@ -37,6 +37,13 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 
 	for col in dataset:
 
+		# convert unnambed columns back to "", but only for m code not tmdl code
+		# Great example of why Microsoft is awful :D
+		if col == "probably_an_index_column":
+			col_for_m = ""
+		else:
+			col_for_m = col
+
 		# Loop through the dataset and find dates
 		for value in dataset[col][0:100]:
 			m = re.search("^\d{4}-\d{2}-\d{2}$", str(value))
@@ -93,7 +100,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 		if dataset[col].dtype == "int64" or dataset[col].dtype == "float64":
 
 			# record more details in a different set
-			col_deets.append(f'{{"{col}", type number}}')
+			col_deets.append(f'{{"{col_for_m}", type number}}')
 
 
 			with open(dataset_file_path, 'a') as file:
@@ -111,7 +118,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 		if dataset[col].dtype == "object":
 
 			# record more details in a different set
-			col_deets.append(f'{{"{col}", type text}}')
+			col_deets.append(f'{{"{col_for_m}", type text}}')
 
 			with open(dataset_file_path, 'a') as file:
 				file.write(f"\tcolumn '{col}'\n")
@@ -129,7 +136,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 			relationship_id = str(uuid.uuid4())
 
 			# record more details in a different set
-			col_deets.append(f'{{"{col}", type date}}')
+			col_deets.append(f'{{"{col_for_m}", type date}}')
 
 			with open(dataset_file_path, 'a') as file:
 				file.write(f"\tcolumn '{col}'\n")
