@@ -20,7 +20,7 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 
 
 	# remove unnamed columns from dataset
-	dataset = dataset.loc[:, ~.columns.str.contains('^Unnamed')]
+	dataset = dataset.loc[:, ~dataset.columns.str.contains('^Unnamed')]
 
 
 
