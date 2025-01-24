@@ -19,6 +19,10 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 		os.makedirs(tables_folder)
 
 
+	# remove unnamed columns from dataset
+	dataset = dataset.loc[:, ~df.columns.str.contains('^Unnamed')]
+
+
 
 	# sink inital header stuff about dataset
 	with open(dataset_file_path, 'w') as file:

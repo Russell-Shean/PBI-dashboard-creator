@@ -50,7 +50,8 @@ def add_csv(dashboard_path, data_path):
 	# load dataset using pandas
 	dataset = pd.read_csv(data_path)
 
-
+	# remove unnamed columns
+	dataset = dataset.loc[:, ~df.columns.str.contains('^Unnamed')]
 
 
 

@@ -1,6 +1,6 @@
 [project]
 name = "PBI_dashboard_creator"
-version = "1.0.43"
+version = "1.0.44"
 authors = [
   { name="Russell Shean", email="russshean@gmail.com" },
 ]
