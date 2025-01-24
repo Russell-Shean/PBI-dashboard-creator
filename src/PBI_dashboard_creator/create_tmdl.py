@@ -152,12 +152,8 @@ def create_tmdl(dashboard_path, dataset_name, dataset_id, dataset):
 			#with open(model_path, "a") as file:
 			#	file.write(f'\nref table LocalDateTable_{file_id}')
 
-			# create a dictionary containing col_deets and col_names
-			col_attributes = {"col_deets":col_deets, "col_names": col_names}
+	# create a dictionary containing col_deets and col_names
+	col_attributes = {"col_deets":col_deets, "col_names": col_names}
+
 			
-			return col_attributes
-
-
-
-
-
+	return col_attributes
