@@ -3,7 +3,13 @@ import os, shutil, json
 
 def add_background_img(dashboard_path, page_id, img_path, alpha = 100, scaling_method = "Fit"):
 
-	'''
+	'''Add a background image to a dashboard page
+
+	:param str dashboard_path: The path where the dashboard files are stored. (This is the top level directory containing the .pbip file and Report and SemanticModel folders). 
+	:param str page_id: The unique id for the page you want to add the chart to. If you used this package's functions it will be in the format page1, page2, page3, page4, etc. If you manually created the page it will be a randomly generated UUID. To find a page's page id, consult the report > definition> pages > page.json file and look in the page order list. 
+	:param str img_path: The path to the image you want to add. (Can be a relative path because the image is copied to the report folder). Allowed image types are whatever PBI allows manually, so probably at least jpeg and png
+	:param int alpha: The transparency of the background image. Must be a whole integer between 1 and 100. 
+	:param str scaling_method: The method used to scale the image available options include ["Fit", ]
 
 
 
@@ -129,15 +135,4 @@ def add_background_img(dashboard_path, page_id, img_path, alpha = 100, scaling_m
 
 
 
-
-
-	#blorg/blorg.Report/StaticResources/RegisteredResources/Taipei_skyline_at_sunset_201506895591283012392.jpg
-
-
-
-
-report_name = "blorg"
-report_location = f"C:/Users/rps1303/PBI_projects"
-
-dashboard_path = f"{report_location}/{report_name}"
 

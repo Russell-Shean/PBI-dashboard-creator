@@ -21,23 +21,24 @@ def add_chart(dashboard_path,
               width ):
 
 
-  '''
-  This function adds a new chart to a page in a power BI dashboard report. 
+  '''This function adds a new chart to a page in a power BI dashboard report. 
 
+
+  :param str dashboard_path: The path where the dashboard files are stored. (This is the top level directory containing the .pbip file and Report and SemanticModel folders). 
+  :param str page_id: The unique id for the page you want to add the background image to. If you used this package's functions it will be in the format page1, page2, page3, page4, etc. If you manually created the page it will be a randomly generated UUID. To find a page's page id, consult the report > definition> pages > page.json file and look in the page order list. 
+  :param str chart_id: Please choose a unique id to use to identify the chart. PBI defaults to using a UUID, but it'd probably be easier if you choose your own id.
   :param str chart_type: The type of chart to build on the page. Known available types include: ["columnChart","barChart", "clusteredBarChart", ]
-  :param str dashboard_path: 
-
-
-
-
-  :param str recipient: The recipient of the message
-  :param str message_body: The body of the message
-  :param priority: The priority of the message, can be a number 1-5
-  :type priority: integer or None
-  :return: the message id
-  :rtype: int
-  :raises ValueError: if the message_body exceeds 160 characters
-  :raises TypeError: if the message_body is not a basestring
+  :param str data_source: The name of the dataset you want to use to build the chart. This corresponds to the dataset_name field in the add data functions. You must have already loaded the data to the dashboard. 
+  :param str chart_title: Give your chart an informative title!:D
+  :param str x_axis_title: Text to display on the x axis
+  :param str y_axis_title: Text to display on the y axis
+  :param str x_axis_var: Column name of a column from data_source that you want to use for the x axis of the chart
+  :param str y_axis_var: Column name of a column from data_source that you want to use for the y axis of the chart
+  :param str y_axis_var_aggregation_type: Type of aggregation method you want to use to summarize y axis variable. Available options include" ["Sum", "Count", "Average"]
+  :param int x_position: The x coordinate of where you want to put the chart on the page. (Probably the coordinates for the chart's bottom left corner)
+  :param int y_position: The y coordinate of where you want to put the chart on the page. (Probably the coordinates for the chart's bottom left corner)
+  :param int height: Height of chart on the page
+  :param int width: Width of chart on the page
 
   '''
 

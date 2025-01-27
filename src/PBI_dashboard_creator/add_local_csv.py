@@ -11,6 +11,26 @@ import PBI_dashboard_creator.create_tmdl as PBI_TMDL
 
 def add_csv(dashboard_path, data_path):
 
+	'''Add a locally stored CSV file to a dashboard
+	
+	:param str dashboard_path: The path where the dashboard files are stored. (This is the top level directory containing the .pbip file and Report and SemanticModel folders). 
+	:param str data_path: The path where the csv file is stored. MUST BE A FULL PATH FOR THE M CODE TO WORK. 
+
+	:returns: dataset_id: A randomly generated UUID that you can use to reference the datset. 
+
+	The dataset path must be full (not relative path.) If using a relative path for the dashboard_path, the path must be within the current working directory. 
+	This function creates custom M code and is therefore more picky than pandas or Power BI desktop. 
+	The csv file should probably not have row numbers. (Any column without a column name will be renamed to "probably_an_index_column")
+	NA values must display as "NA" or "null" not as N/A. 
+	If the data is malformed in Power BI, try cleaning it first in python and then rerunning this function. 
+
+	This function creates a new TMDL file defining the dataset in TMDL format and also in M code.
+	The DiagramLayout and Model.tmdl files are updated to include refrences to the new dataset. 
+
+
+
+	'''
+
   # generate a random id for the data set
 	dataset_id = str(uuid.uuid4())
 
@@ -79,6 +99,11 @@ def add_csv(dashboard_path, data_path):
 		file.write(f'\t\t\t\t\t#"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{{', '.join(map(str, col_attributes["col_deets"]))}}})\n')
 		file.write('\t\t\t\tin\n\t\t\t\t\t#"Changed Type"\n\n')
 		file.write('\tannotation PBI_ResultType = Table\n\n\tannotation PBI_NavigationStepName = Navigation\n\n')
+
+
+
+	# return the dataset_id in case we need it later
+	return dataset_id
 
 
 
