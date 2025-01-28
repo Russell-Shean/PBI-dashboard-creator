@@ -73,14 +73,14 @@ def add_new_page(dashboard_path, page_name, title = None, subtitle = None):
                      y_position = 44)
 
 	if subtitle is not None:
-		PBI_text_box.add_text_box(text = title,
+		PBI_text_box.add_text_box(text = subtitle,
              dashboard_path= dashboard_path,
                page_id= new_page_id,
                  text_box_id= f"{new_page_id}_subtitle", 
                  height=38,
                    width=545,
-                     x_position = 410, 
-                     y_position = 78,
+                     x_position = 450, 
+                     y_position = 90,
                      font_size = 14)
 
 
