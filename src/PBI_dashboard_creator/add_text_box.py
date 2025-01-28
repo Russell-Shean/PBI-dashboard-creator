@@ -63,7 +63,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
         
     text_box_json = {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
-  "name": page_id,
+  "name": text_box_id,
   "position": {
     "x": x_position,
     "y": y_position,
