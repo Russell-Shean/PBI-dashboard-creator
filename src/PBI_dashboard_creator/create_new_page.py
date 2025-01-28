@@ -78,9 +78,9 @@ def add_new_page(dashboard_path, page_name, title = None, subtitle = None):
                page_id= new_page_id,
                  text_box_id= f"{new_page_id}_subtitle", 
                  height=38,
-                   width=545,
-                     x_position = 450, 
-                     y_position = 90,
+                   width=300,
+                     x_position = 500, 
+                     y_position = 93,
                      font_size = 14)
 
 
