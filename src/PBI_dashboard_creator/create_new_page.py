@@ -1,11 +1,17 @@
 import os, json
 
-def add_new_page(dashboard_path, page_name):
+import PBI_dashboard_creator.add_text_box as PBI_text_box
+
+
+def add_new_page(dashboard_path, page_name, title = None, subtitle = None):
 
 	'''Create a new blank dashboard page
 
 	:param str dashboard_path: The path where the dashboard files are stored. (This is the top level directory containing the .pbip file and Report and SemanticModel folders). 
 	:param str page_name: The display name for the page you just created. This is differnt from the page_id which is only used internally. 
+	:param str title: Title to put at the top of the page. This under the hood calls the add_text_box() function. If you would like more control over the title's appearance use that function instead.
+	:param str sub_title: Title to put at the top of the page. This under the hood calls the add_text_box() function. If you would like more control over the title's appearance use that function instead.
+
 
 	:returns: new_page_id: The unique id for the page you just created. If you used this function it will be in the format page1, page2, page3, page4, etc. If you manually create a page it will be a randomly generated UUID. To find a page's page id, consult the report > definition> pages > page.json file and look in the page order list. 
   
@@ -49,9 +55,34 @@ def add_new_page(dashboard_path, page_name):
 	                  "width": 1280,
 					  "objects":{}}
 
+
 	# write to file
 	with open(new_page_json_path, "w") as file:
 		json.dump(new_page_json, file, indent = 2)
+
+
+	# Add title and subtitle if requested 
+	if title is not None:
+		PBI_text_box.add_text_box(text = title,
+             dashboard_path= dashboard_path,
+               page_id= new_page_id,
+                 text_box_id= f"{new_page_id}_title", 
+                 height=68,
+                   width=545,
+                     x_position = 394, 
+                     y_position = 44)
+
+	if subtitle is not None:
+		PBI_text_box.add_text_box(text = title,
+             dashboard_path= dashboard_path,
+               page_id= new_page_id,
+                 text_box_id= f"{new_page_id}_subtitle", 
+                 height=38,
+                   width=545,
+                     x_position = 410, 
+                     y_position = 78,
+                     font_size = 14)
+
 
 
 	return new_page_id
