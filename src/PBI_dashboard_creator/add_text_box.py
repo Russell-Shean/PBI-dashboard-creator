@@ -2,7 +2,7 @@ import  os, json, re
 
 def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
  x_position, y_position, z_position = 6000, tab_order=-1001, 
-  font_weight = "bold", font_size=32, font_color="#000000"):
+  font_weight = "bold", font_size=32, font_color="#000000", background_color = "#ffffff"):
     
     '''Add a text box to a page
 
@@ -22,7 +22,8 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
     
     :param str font_weight: This is an option to change the font's weight. Defaults to bold. Available options include: ["bold"]
     :param int font_size: The font size in pts. Must be a whole integer. Defaults to 32 pt
-    :param int font_color: Hex code for the font color you'd like to use. Defaults to black (#000000)  
+    :param str font_color: Hex code for the font color you'd like to use. Defaults to black (#000000) 
+    :param str background_color: Hex code for the background color of the text box. Defaults to white (#ffffff) 
 
     This function creates a new text box on a page. 
     '''
@@ -100,13 +101,25 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
       "background": [
         {
           "properties": {
-            "show": {
+          "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": f"'{background_color}'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "0D"
                 }
               }
             }
+            
           }
         }
       ]
