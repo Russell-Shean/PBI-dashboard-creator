@@ -2,7 +2,7 @@ import  os, json, re
 
 def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
  x_position, y_position, z_position = 6000, tab_order=-1001, 
-  font_weight = "bold", font_size=32, font_color="#000000", background_color = "#ffffff"):
+  font_weight = "bold", font_size=32, font_color="#000000", background_color = None):
     
     '''Add a text box to a page
 
@@ -23,7 +23,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
     :param str font_weight: This is an option to change the font's weight. Defaults to bold. Available options include: ["bold"]
     :param int font_size: The font size in pts. Must be a whole integer. Defaults to 32 pt
     :param str font_color: Hex code for the font color you'd like to use. Defaults to black (#000000) 
-    :param str background_color: Hex code for the background color of the text box. Defaults to white (#ffffff) 
+    :param str background_color: Hex code for the background color of the text box. Defaults to None (transparent) 
 
     This function creates a new text box on a page. 
     '''
@@ -101,6 +101,28 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
       "background": [
         {
           "properties": {
+          "show": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": True
+  }
+    }
+
+  # add a background color if the user provided one
+  if background_color is not None:
+    text_box_json["visual"]["visualContainerObjects"]["background"]["properties"] = {
+
+
+
+
           "color": {
               "solid": {
                 "color": {
@@ -121,12 +143,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
             }
             
           }
-        }
-      ]
-    },
-    "drillFilterOtherVisuals": True
-  }
-    }
+
 
     # Write out the new json 
     with open(visual_json_path, "w") as file:
