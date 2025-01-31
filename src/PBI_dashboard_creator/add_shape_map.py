@@ -396,6 +396,9 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                    width = box_width,
                    x_position = legend_x_position + box_width * i,
                    y_position = legend_y_position,
+
+                   # Make sure that the z index is more than the map's z_index
+                   z_position = z_position + 1,
                    text_align = "center",
                    font_weight = "bold",
                     font_size=12, 

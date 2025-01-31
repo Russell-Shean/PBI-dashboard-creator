@@ -94,7 +94,7 @@ def add_csv_from_blob(dashboard_path, account_url, blob_name, data_path, tenant_
             account_url=account_url,
             credential=credential,
             file_system_name=blob_name,
-            data_path=data_path
+            file_path=data_path
             )
 
 
