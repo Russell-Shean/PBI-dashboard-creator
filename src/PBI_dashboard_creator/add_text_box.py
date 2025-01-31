@@ -1,14 +1,15 @@
 import  os, json, re
 
 def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
- x_position, y_position, z_position = 6000, tab_order=-1001, 
+ x_position, y_position, z_position = 6000, tab_order=-1001,
+ text_align = "left", 
   font_weight = "bold", font_size=32, font_color="#000000", background_color = None):
     
   '''Add a text box to a page
 
   :param str text: The text you want to display in the box
   :param str dashboard_path: The path where the dashboard files are stored. (This is the top level directory containing the .pbip file and Report and SemanticModel folders). 
-  :param str page_id: The unique id for the page you want to add the background image to. If you used this package's functions it will be in the format page1, page2, page3, page4, etc. If you manually created the page it will be a randomly generated UUID. To find a page's page id, consult the report > definition> pages > page.json file and look in the page order list. 
+  :param str page_id: The unique id for the page you want to add the text box to. If you used this package's functions it will be in the format page1, page2, page3, page4, etc. If you manually created the page it will be a randomly generated UUID. To find a page's page id, consult the report > definition> pages > page.json file and look in the page order list. 
   :param str text_box_id: Please choose a unique id to use to identify the text box. PBI defaults to using a UUID, but it'd probably be easier if you choose your own id.
 
   :param int height: Height of text box on the page
@@ -19,7 +20,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
   :param int z_position: The z index for the visual. (Larger number means more to the front, smaller number means more to the back). Defaults to 6000
   :param int tab_order: The order which the screen reader reads different elements on the page. Defaults to -1001 for now. (I need to do more to figure out what the numbers correpond to. It should also be possible to create a function to automatically order this left to right top to bottom by looping through all the visuals on a page and comparing their x and y positions)
     
-    
+  :param bool text_align: How would you like the text aligned (available options: "left", "right", "center")
   :param str font_weight: This is an option to change the font's weight. Defaults to bold. Available options include: ["bold"]
   :param int font_size: The font size in pts. Must be a whole integer. Defaults to 32 pt
   :param str font_color: Hex code for the font color you'd like to use. Defaults to black (#000000) 
@@ -50,7 +51,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
 
   # checks ---------------------------------------------------------
 
-	# page exists? 
+  # page exists? 
   if os.path.isdir(page_folder_path) is not True:
     raise NameError(f"Couldn't find the page folder at {page_folder_path}")
     
@@ -90,7 +91,8 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
                       "color": font_color
                     }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": text_align
               }
             ]
           }
@@ -118,12 +120,21 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
 
   # add a background color if the user provided one
   if background_color is not None:
-    text_box_json["visual"]["visualContainerObjects"]["background"]["properties"] = {
+    text_box_json["visual"]["visualContainerObjects"]["background"].append( {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        })
 
-
-
-
-          "color": {
+    text_box_json["visual"]["visualContainerObjects"]["background"].append( {
+          "properties": {
+            "color": {
               "solid": {
                 "color": {
                   "expr": {
@@ -141,11 +152,14 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
                 }
               }
             }
-            
           }
+        })
+
+
 
 
   # Write out the new json 
   with open(visual_json_path, "w") as file:
     json.dump(text_box_json, file, indent = 2)
+
 
