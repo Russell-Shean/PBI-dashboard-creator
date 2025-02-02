@@ -3,7 +3,7 @@
 
 import  os, json, re, shutil
 
-import PBI_dashboard_creator.add_text_box as PBI_text_box
+import PBI_dashboard_creator as PBI
 
 def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
  map_title, location_var, color_var, color_breaks, color_palette, 
@@ -388,7 +388,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
     # Add a text box for each bin and make a legend that way
     # There has got to be a better way to do this ....lol
     for i in range(0, len(color_palette)):
-      PBI_text_box.add_text_box(text = f"{color_breaks[i]} - {color_breaks[i + 1]}", 
+      PBI.add_text_box(text = f"{color_breaks[i]} - {color_breaks[i + 1]}", 
                    dashboard_path = dashboard_path, 
                    page_id = page_id, 
                    text_box_id = f"{map_id}_legend_box{i + 1}", 

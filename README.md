@@ -53,7 +53,7 @@ py -m pip --version
 5. Install the package.    
 We'll install from a wheel stored in the package we cloned from github in step 2. In command prompt run the following:    
 ```batchfile
-py -m pip install PBI_dashboard_creator/dist/pbi_dashboard_creator-1.0.64-py3-none-any.whl
+py -m pip install PBI_dashboard_creator/dist/pbi_dashboard_creator-1.0.65-py3-none-any.whl
 
 ```     
 
