@@ -1,6 +1,6 @@
 [project]
 name = "PBI_dashboard_creator"
-version = "1.0.62"
+version = "1.0.64"
 authors = [
   { name="Russell Shean", email="russshean@gmail.com" },
 ]
@@ -15,8 +15,12 @@ license = "GPL-3.0-or-later"
 license-files = ["LICEN[CS]E*"]
 
 dependencies = [
+"azure.storage.blob",
+"azure.storage.file.datalake",
+"azure.identity",
 "keyring",
-"pandas" 
+"pandas"
+
 ]
 
 [project.urls]
