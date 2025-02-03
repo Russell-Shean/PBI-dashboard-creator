@@ -6,18 +6,16 @@
 PBI_dashboard_creator documentation
 ===================================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Here's the documentation built automatically from function docstrings
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   intro
-   PBI_dashboard_creator
-   examples
+intro
+PBI_dashboard_creator
+examples
 
 
 Indices and tables
