@@ -1,3 +1,5 @@
+
+import os
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -26,3 +28,12 @@ exclude_patterns = []
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+#Set the canonical URL
+
+#A canonical URL allows you to specify the preferred version of a web page to prevent duplicated content.
+# Set your html_baseurl to your Read the Docs canonical URL using a Read the Docs environment variable:
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "/")
+
+# this is needed too?
+extensions = ["myst_parser"]
