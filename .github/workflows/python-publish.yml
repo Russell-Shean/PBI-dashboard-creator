@@ -33,9 +33,6 @@ jobs:
           # update version number in pyproject.toml
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py
-
-          # quit after editing toml file
-          ./scripts/update_toml2.py
           
           python 
           python -m pip install build
