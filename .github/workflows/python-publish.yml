@@ -38,6 +38,15 @@ jobs:
           python -m pip install build
           python -m build
 
+        # commit toml file back to repo
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      
+       # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v5
+     
+
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
