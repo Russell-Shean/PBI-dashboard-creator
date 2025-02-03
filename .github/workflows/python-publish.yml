@@ -32,6 +32,9 @@ jobs:
           # NOTE: put your own distribution build steps here.
           # update version number in pyproject.toml
           ./scripts/update_toml.py
+
+          # quit after editing toml file
+          ./scripts/update_toml2.py
           
           python 
           python -m pip install build
