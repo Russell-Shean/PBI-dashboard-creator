@@ -14,7 +14,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   release-build:
@@ -44,6 +44,8 @@ jobs:
         # commit toml file back to repo
        # Commit all changed files back to the repository
       - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update version number
      
 
 
