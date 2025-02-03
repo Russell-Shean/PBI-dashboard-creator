@@ -26,6 +26,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+          ref: ${{ github.head_ref }}
 
       - name: Build release distributions
         run: |
@@ -39,10 +40,6 @@ jobs:
           python -m build
 
         # commit toml file back to repo
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-      
        # Commit all changed files back to the repository
       - uses: stefanzweifel/git-auto-commit-action@v5
      
