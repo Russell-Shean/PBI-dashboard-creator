@@ -47,15 +47,15 @@ py -m pip --version
 
 ```   
    
-5. Install the package.    
-We'll install from a wheel stored in the package we cloned from github in step 2.     
+5. Install the package.
+Install the package from a wheel stored in the repo we cloned from github in step 2.     
 ```batchfile
 py -m pip install PBI_dashboard_creator/dist/pbi_dashboard_creator-1.0.65-py3-none-any.whl
 
 ```     
 
-6. Create the example dashboard.    
-We'll run an example script to generate an example dashboard. I 
+6. Create the example dashboard.
+Run an example script to generate an example dashboard.
 ```batchfile
 
 py PBI_dashboard_creator/examples/create_example_dashboard.py
@@ -63,7 +63,7 @@ py PBI_dashboard_creator/examples/create_example_dashboard.py
 ```     
     
 7. Open the dashboard.      
-Let's open the dashboard to confirm everything worked. 
+Open the dashboard to confirm everything worked. 
 ```
 start test_dashboard/test_dashboard.pbip
 ```
