@@ -181,6 +181,8 @@ def add_csv_from_blob(dashboard_path, account_url, blob_name, data_path, tenant_
 
 
     # write out M code 
+    # define tricky bits
+    formatted_column_details = ', '.join(map(str, col_attributes["col_deets"]))
     with open(dataset_file_path, 'a') as file:
         file.write(f'\tpartition {dataset_name} = m\n')
         file.write('\t\tmode: import\n\t\tsource =\n\t\t\t\tlet\n')
@@ -189,7 +191,7 @@ def add_csv_from_blob(dashboard_path, account_url, blob_name, data_path, tenant_
         file.write(f'\t\t\t\t\t#"https://{account_name} blob core windows net/{blob_name}/_{data_path.replace(".csv", "")} csv" = #"{blob_name}1"{{[#"Folder Path"="{account_url}/{blob_name}/",Name="{data_path}"]}}[Content],\n')
         file.write(f'\t\t\t\t\t#"Imported CSV" = Csv.Document(#"https://{account_name} blob core windows net/{blob_name}/_{data_path.replace(".csv", "")} csv",[Delimiter=",", Columns={len(dataset.columns)}, Encoding=1252, QuoteStyle=QuoteStyle.None]),\n')
         file.write(f'\t\t\t\t\t#"Promoted Headers" = Table.PromoteHeaders(#"Imported CSV", [PromoteAllScalars=true]),\n')
-        file.write(f'\t\t\t\t\t#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{{', '.join(map(str, col_attributes["col_deets"]))}}})\n')
+        file.write(f'\t\t\t\t\t#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{{ formatted_column_details }}})\n')
         file.write('\t\t\t\tin\n\t\t\t\t\t#"Changed Type"\n\n')
         file.write('\tchangedProperty = Name\n\n\tannotation PBI_ResultType = Table\n\n\tannotation PBI_NavigationStepName = Navigation\n\n')
 

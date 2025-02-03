@@ -1,8 +1,9 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../../src/PBI_dashboard_creator/"))
+sys.path.insert(0, os.path.abspath("../../src/"))
 
+print(f"using this system path to look for the module: {sys.path[0]}")
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -19,7 +20,7 @@ release = '1.0.62'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.autosummary']
 
 templates_path = ['_templates']
 exclude_patterns = []

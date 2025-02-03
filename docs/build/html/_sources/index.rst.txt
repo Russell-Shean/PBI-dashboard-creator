@@ -17,6 +17,11 @@ Here's the documentation built automatically from function docstrings
    PBI_dashboard_creator
    examples
 
+.. automodule:: PBI_dashboard_creator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Indices and tables
 ==================

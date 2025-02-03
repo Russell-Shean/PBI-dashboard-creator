@@ -90,13 +90,18 @@ def add_csv(dashboard_path, data_path):
 
 	# write out M code 
 	# bc we're stilllllllll not done.....
+
+	# define tricky bits of code
+	replacement_values =  '", "'.join(col_attributes["col_names"]) 
+	formatted_column_details = ', '.join(map(str, col_attributes["col_deets"]))
+
 	with open(dataset_file_path, 'a') as file:
 		file.write(f'\tpartition {dataset_name} = m\n')
 		file.write('\t\tmode: import\n\t\tsource =\n\t\t\t\tlet\n')
 		file.write(f'\t\t\t\t\tSource = Csv.Document(File.Contents("{data_path_reversed}"),[Delimiter=",", Columns={len(dataset.columns)}, Encoding=1252, QuoteStyle=QuoteStyle.None]),\n')
 		file.write('\t\t\t\t\t#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),\n')
-		file.write(f'\t\t\t\t\t#"Replaced Value" = Table.ReplaceValue(#"Promoted Headers","NA",null,Replacer.ReplaceValue,{{\"{'", "'.join(col_attributes["col_names"])}\"}}),\n')
-		file.write(f'\t\t\t\t\t#"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{{', '.join(map(str, col_attributes["col_deets"]))}}})\n')
+		file.write(f'\t\t\t\t\t#"Replaced Value" = Table.ReplaceValue(#"Promoted Headers","NA",null,Replacer.ReplaceValue,{{"  { replacement_values  }  "}}),\n')
+		file.write(f'\t\t\t\t\t#"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{  {  formatted_column_details  }   }})\n')
 		file.write('\t\t\t\tin\n\t\t\t\t\t#"Changed Type"\n\n')
 		file.write('\tannotation PBI_ResultType = Table\n\n\tannotation PBI_NavigationStepName = Navigation\n\n')
 
