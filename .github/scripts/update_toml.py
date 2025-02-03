@@ -1,7 +1,7 @@
 import re, shutil
 
 
-with open("./pyproject3.toml", 'w') as tmp:
+with open("./pyproject3.toml", "w") as tmp:
   with open("./pyproject.toml", "r") as file:
     for line in file.readlines():
       
