@@ -40,8 +40,6 @@ jobs:
           python 
           python -m pip install build
           python -m build
-          
-          py -m build && py -m twine upload dist/* && py -m pip install --upgrade PBI_dashboard_creator && py -m pip install --upgrade PBI_dashboard_creator && git add . && git commit -m "fix import statements" && git push && rmdir /s /q dist
 
 
       - name: Upload distributions
@@ -67,7 +65,7 @@ jobs:
       #
       # ALTERNATIVE: if your GitHub Release name is the PyPI project version string
       # ALTERNATIVE: exactly, uncomment the following line instead:
-      # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
+      url: https://pypi.org/project/PBI_dashboard_creator/${{ github.event.release.name }}
 
     steps:
       - name: Retrieve release distributions
