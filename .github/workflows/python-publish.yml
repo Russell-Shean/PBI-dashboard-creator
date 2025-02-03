@@ -31,6 +31,7 @@ jobs:
         run: |
           # NOTE: put your own distribution build steps here.
           # update version number in pyproject.toml
+          chmod +x ./.github/scripts/update_toml.py
           ./.github/scripts/update_toml.py
 
           # quit after editing toml file
