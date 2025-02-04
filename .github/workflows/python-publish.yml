@@ -38,8 +38,8 @@ jobs:
           python-version: "3.x"
           
 
-      - name: Update version number
-        run: |
+      #- name: Update version number
+        #run: |
           # NOTE: put your own distribution build steps here.
           # update version number in pyproject.toml
           # This is the version number : ${{ github.event.release.tag_name }}
