@@ -104,8 +104,39 @@ start test_dashboard/test_dashboard.pbip
 
 8. Refresh data models   
 After Power BI opens, you'll see a banner that looks like this:
-![image](https://github.com/user-attachments/assets/e71b04b0-7402-4544-9fda-ff9d898df614)
+![image](https://github.com/user-attachments/assets/e71b04b0-7402-4544-9fda-ff9d898df614)      
+
+Click `Refresh now`      
+
+If everything worked you should have a dashboard that looks like this:     
+![image](https://github.com/user-attachments/assets/70cb3771-410d-44c0-850a-dfb5d13949f2)     
+![image](https://github.com/user-attachments/assets/1dd0c4ee-469d-40b2-ab20-ef3da3fcdb66)        
+
+![image](https://github.com/user-attachments/assets/3bdab36e-5fdc-47fc-9ddf-64a69e3fbd21)       
+
+# Next steps
+The code used to generate the dashboard is stored <a href= "https://github.com/Russell-Shean/PBI-dashboard-creator/tree/main/examples">here</a>      
+The function documentation is stored <a href="https://pbi-dashboard-creator.readthedocs.io/en/latest/">here</a>       
+
+Try building your own dashboards with these functions and let me know what happens!   
+
+# Feedback    
+I welcome the following feedback:    
+1. Pull requests to add features, add tests, fix bugs, or improve documentation. If the change is a major change create an issue first.
+2. Issues to suggest new features, report bugs, or tell me that the documentation is confusing 😅
+3. Power BI feature requests. I need help from Power BI developers who don't neccesarily have experience with python or github. I don't rely know Power BI 😅, so please feel free to suggest new features. It would be really helpful if you could include a .pbix file that has the feature or even better a git diff of the dashboard before and after the change.(Use the .pbip format)
+4. Tests. I need some way to test DAX, M and TMDL for validity without using Power BI desktop. If you know of a tool I could use in Github Actions let me know! 
+
+Big changes coming up:    
+1. This package will be renamed as powerbpy and migrated to a different github and pypi location. The version will be reset to 0.1.0
+2. I will add a step-by-step explanation/tutorial for the example dashboard
+3. I will deploy to conda
+4. I plan to convert the functions to classes and methods
+5. I will add functions to do the following:
+   - Create a map with a dynamic legend
+   - Add cards and slicers
+   - list pages
 
 
 
-Click `Refresh now`
+
