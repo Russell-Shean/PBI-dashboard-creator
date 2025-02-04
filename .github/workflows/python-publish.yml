@@ -51,6 +51,10 @@ jobs:
           # not supposed to do this. Supposed to create a new tag, but....
           # we're only changing the version number
           # reference: https://stackoverflow.com/a/50454106/16502170
+
+          # discover tag names...
+          git tag
+          
           git checkout tag/${{ github.event.release.tag_name }}
           git checkout -b my-tagged-branch
 
