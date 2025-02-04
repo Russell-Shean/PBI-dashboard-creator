@@ -30,10 +30,12 @@ with open("./pyproject3.toml", "w") as tmp:
       
         new_ending_number = int(ending_number.group(0)) + 1
         print(new_ending_number)
-      
+
+        release_tag = args.release_tag
+        release_tag = release_tag.replace("v", "")
 
         #line = re.sub('\\d+"$', str(new_ending_number) + '"', line)
-        line = line.replace(version_match.group(0), args.release_tag)
+        line = line.replace(version_match.group(0), release_tag)
         print(line)
 
 
