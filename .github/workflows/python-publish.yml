@@ -38,8 +38,8 @@ jobs:
           python-version: "3.x"
           
 
-      #- name: Update version number
-        #run: |
+      - name: Update version number
+        run: |
           # NOTE: put your own distribution build steps here.
           # update version number in pyproject.toml
           # This is the version number : ${{ github.event.release.tag_name }}
@@ -67,8 +67,8 @@ jobs:
 
 
           # update version in toml file
-          #chmod +x ./.github/scripts/update_toml.py
-          #python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
+          chmod +x ./.github/scripts/update_toml.py
+          python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
 
           # commit the change
           #git add .
@@ -160,3 +160,35 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
+
+# on a new runner re-run the toml file updater to add the change to the main branch
+  update-toml:
+     runs-on: ubuntu-latest
+     needs: 
+       - pypi-publish
+     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+          
+      - name: Update version number
+        run: |
+          # update version in toml file
+          chmod +x ./.github/scripts/update_toml.py
+          python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+        #  create_branch: true
+          commit_message: Update version number
+          
+        
+     
+      
+     
+  
+
