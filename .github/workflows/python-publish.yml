@@ -43,8 +43,13 @@ jobs:
           # NOTE: put your own distribution build steps here.
           # update version number in pyproject.toml
           # This is the version number : ${{ github.event.release.tag_name }}
+
+          # install dependencies
+          py -m pip install argparse
+
+          # update version in toml file
           chmod +x ./.github/scripts/update_toml.py
-          python ./.github/scripts/update_toml.py
+          python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
           
 
         # commit toml file back to repo
