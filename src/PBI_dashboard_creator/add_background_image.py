@@ -12,10 +12,6 @@ def add_background_img(dashboard_path, page_id, img_path, alpha = 100, scaling_m
 	:param str scaling_method: The method used to scale the image available options include ["Fit", ]
 
 
-	This is a test to make sure github actions is working....
-
-
-
 	'''
 
 	if type(alpha) is not int:
