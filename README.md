@@ -37,8 +37,8 @@ Power BI settings:
 You'll need to enable some preview features in Power BI Desktop. Navigate to `File` > `Options and Settings` > `Options` > `Preview features` and enable the following options:
 1. Shape map visual
 2. Power BI Project (.pbip) save option
-2. A. Store Semantic Model using TMDL format
-2. B. Store reports using enhanced metadata format (PBIR)
+3. Store Semantic Model using TMDL format
+4. Store reports using enhanced metadata format (PBIR)
 
 
 # Run the example
