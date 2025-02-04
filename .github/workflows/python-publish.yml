@@ -87,6 +87,9 @@ jobs:
           # try switching to main?
           git checkout main
 
+          # merge back to main
+          git merge my-tagged-branch
+
           # remove branch now that it's no longer needed
           git branch -d my-tagged-branch
 
