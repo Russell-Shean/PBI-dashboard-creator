@@ -63,13 +63,13 @@ jobs:
 
           git push  -u origin my-tagged-branch
 
-          git tag -d ${{ github.event.release.tag_name }
+          git tag -d ${{ github.event.release.tag_name }}
 
-          git tag ${{ github.event.release.tag_name }
+          git tag ${{ github.event.release.tag_name }}
 
-          git push origin :${{ github.event.release.tag_name }
+          git push origin :${{ github.event.release.tag_name }}
 
-          git push origin ${{ github.event.release.tag_name }
+          git push origin ${{ github.event.release.tag_name }}
 
           
           
