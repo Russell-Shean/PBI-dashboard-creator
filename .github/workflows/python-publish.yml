@@ -81,6 +81,12 @@ jobs:
           git push origin :${{ github.event.release.tag_name }}
           git push origin ${{ github.event.release.tag_name }}
 
+          # figure out which branch we're in
+          git branch
+
+          # try switching to main?
+          git checkout main
+
           # remove branch now that it's no longer needed
           git branch -d my-tagged-branch
 
