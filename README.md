@@ -1,10 +1,27 @@
-# PBI-dashboard-creator
-This is a python module that can be used to automatically create PowerBI dashboards using the .pbir file type
+# Power Bpy
+Do you wish you could build dashboard with python or R, but can't because the client specifically asked for Power BI or your employer only supports publishing Power BI? Do you love love love Power BI, but wish there was a way to automatically generate parts of your dashboard to speed up your development process?          
+
+Introducing Power Bpy, a python package that lets you create Power BI dashboards using functions 💪 instead of the point-and-click interface 🥹. Dashboards created using these functions can be opened, edited and saved normally in Power BI desktop. Currently the package has functions that let you *automatically* 🥳 do the following:     
+- Create a new dashboard
+- Import data from
+- - csv file stored locally 
+  - csv file stored in Azure Data Lake Storage (ADLS)
+  - Power BI table stored as a Tabular Model Definition Language (TMDL) file
+- Add a page
+- Add background images to a page
+- Add visuals to a page
+  - charts
+  - slicers
+  - cards
+  - maps
+  - text boxes
+  - buttons
 [![pypi Version](https://img.shields.io/pypi/v/PBI-dashboard-creator.svg?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/PBI-dashboard-creator/)
 [![PyPI Downloads](https://static.pepy.tech/badge/pbi-dashboard-creator)](https://pepy.tech/projects/pbi-dashboard-creator)
 [![Codecov test coverage](https://codecov.io/gh/Russell-Shean/PBI-dashboard-creator/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Russell-Shean/PBI-dashboard-creator?branch=master)
 
-## prerequisites
+## Dependencies    
+Before you can start to build power BI dashboards using this package's functions you'll need the following: 
 1. python and pip installed and on path
 2. git installed and on path
 3. Power BI Desktop (You can create the dashboards without this, but not view them).      
