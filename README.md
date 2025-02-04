@@ -102,7 +102,8 @@ Open the dashboard to confirm everything worked.
 start test_dashboard/test_dashboard.pbip
 ```
 
-8. Refresh data models   
+8. Refresh data models
+
 After Power BI opens, you'll see a banner that looks like this:
 ![image](https://github.com/user-attachments/assets/e71b04b0-7402-4544-9fda-ff9d898df614)      
 
