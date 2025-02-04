@@ -45,11 +45,11 @@ jobs:
           # This is the version number : ${{ github.event.release.tag_name }}
 
           # specify user and email
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          #git config user.name "github-actions[bot]"
+          #git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # install dependencies
-          python -m pip install argparse
+          #python -m pip install argparse
 
           # add some git sourcery to add the updated pyprojects.toml file to th existing tag
           # not supposed to do this. Supposed to create a new tag, but....
@@ -57,44 +57,47 @@ jobs:
           # reference: https://stackoverflow.com/a/50454106/16502170
 
           # discover tag names...
-          git tag
+          #git tag
 
           # fetch tags locally?
-          git fetch --all --tags --prune
+          #git fetch --all --tags --prune
           
-          git checkout tags/${{ github.event.release.tag_name }}
-          git checkout -b my-tagged-branch
+          #git checkout tags/${{ github.event.release.tag_name }}
+          #git checkout -b my-tagged-branch
 
 
           # update version in toml file
-          chmod +x ./.github/scripts/update_toml.py
-          python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
+          #chmod +x ./.github/scripts/update_toml.py
+          #python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
 
           # commit the change
-          git add .
-          git commit -m "update version number in pyproject.toml"
-          git push  -u origin my-tagged-branch
+          #git add .
+          #git commit -m "update version number in pyproject.toml"
+          #git push  -u origin my-tagged-branch
 
           # deal with tag clean up
-          git tag -d ${{ github.event.release.tag_name }}
-          git tag ${{ github.event.release.tag_name }}
-          git push origin :${{ github.event.release.tag_name }}
-          git push origin ${{ github.event.release.tag_name }}
+          #git tag -d ${{ github.event.release.tag_name }}
+          #git tag ${{ github.event.release.tag_name }}
+          #git push origin :${{ github.event.release.tag_name }}
+          #git push origin ${{ github.event.release.tag_name }}
 
           # figure out which branch we're in
-          git branch
+          #git branch
 
           # try switching to main?
-          git checkout origin/main
-          git checkout main
-          git pull origin main
-          git merge my-tagged-branch
-          git push origin main
+          #git checkout origin/main
+          #git checkout main
+          #git pull origin main
+          #git merge my-tagged-branch
+          #git push origin main
 
 
           # remove branch now that it's no longer needed
-          git branch -d my-tagged-branch
-          git branch -d origin/my-tagged-branch
+          #git branch -d my-tagged-branch
+          #git branch -d origin/my-tagged-branch
+
+          # realy annoyed about how dumb and difficult it is to automatically update the python version in the 
+          # pyproject.toml file....
 
           
    
