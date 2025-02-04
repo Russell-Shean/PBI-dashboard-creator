@@ -53,35 +53,38 @@ jobs:
           # reference: https://stackoverflow.com/a/50454106/16502170
 
           # discover tag names...
-          # git tag
+          git tag
+
+          # fetch tags locally?
+          git fetch --all --tags --prune
           
-          # git checkout tag/${{ github.event.release.tag_name }}
-          # git checkout -b my-tagged-branch
+          git checkout tag/${{ github.event.release.tag_name }}
+          git checkout -b my-tagged-branch
 
           # update version in toml file
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
 
-          # git add .
-          # git commit -m "update version number in pyproject.toml"
+          git add .
+          git commit -m "update version number in pyproject.toml"
 
-          # git push  -u origin my-tagged-branch
+          git push  -u origin my-tagged-branch
 
-          # git tag -d ${{ github.event.release.tag_name }}
+          git tag -d ${{ github.event.release.tag_name }}
 
-          # git tag ${{ github.event.release.tag_name }}
+          git tag ${{ github.event.release.tag_name }}
 
-          # git push origin :${{ github.event.release.tag_name }}
+          git push origin :${{ github.event.release.tag_name }}
 
-          # git push origin ${{ github.event.release.tag_name }}
+          git push origin ${{ github.event.release.tag_name }}
 
           
    
-      - uses: richardsimko/update-tag@v1
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- uses: richardsimko/update-tag@v1
+       # with:
+        #  tag_name: ${{ github.event.release.tag_name }}
+        #env:
+         # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           
           
