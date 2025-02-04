@@ -23,7 +23,7 @@ cd automatic_PBI_dashboards_example
 git clone https://github.com/Russell-Shean/PBI_dashboard_creator
 ```
 3. Activate venv.    
-The following is taken from this <a href="https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/">tutorial<a>. We'll use venv to install the python package in an isolated environemnt.   
+The following is taken from this <a href="https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/">tutorial</a>. We'll use venv to install the python package in an isolated environemnt.   
 ```batchfile
 :: create a virtual environment
 py -m venv .venv
@@ -48,9 +48,9 @@ py -m pip --version
 ```   
    
 5. Install the package.
-Install the package from a wheel stored in the repo we cloned from github in step 2.     
+Install the package from pypi.     
 ```batchfile
-py -m pip install PBI_dashboard_creator/dist/pbi_dashboard_creator-1.0.65-py3-none-any.whl
+py -m pip install PBI_dashboard_creator
 
 ```     
 

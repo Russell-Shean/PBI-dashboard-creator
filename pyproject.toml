@@ -34,3 +34,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/PBI_dashboard_creator"]
+
+[tool.hatch.build.targets]
+docs = { script = "sphinx-build clean && sphinx-build -b html docs/ build/" }
