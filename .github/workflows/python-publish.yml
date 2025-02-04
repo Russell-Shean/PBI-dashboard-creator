@@ -47,17 +47,42 @@ jobs:
           # install dependencies
           python -m pip install argparse
 
+          # add some git sourcery to add the updated pyprojects.toml file to th existing tag
+          # not supposed to do this. Supposed to create a new tag, but....
+          # we're only changing the version number
+          # reference: https://stackoverflow.com/a/50454106/16502170
+          git checkout tag/${{ github.event.release.tag_name }}
+          git checkout -b my-tagged-branch
+
           # update version in toml file
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
+
+          git add .
+          git commit -m "update version number in pyproject.toml"
+
+          git push  -u origin my-tagged-branch
+
+          git tag -d ${{ github.event.release.tag_name }
+
+          git tag ${{ github.event.release.tag_name }
+
+          git push origin :${{ github.event.release.tag_name }
+
+          git push origin ${{ github.event.release.tag_name }
+
+          
+          
+
+          
           
 
         # commit toml file back to repo
        # Commit all changed files back to the repository
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          create_branch: true
-          commit_message: Update version number
+      #- uses: stefanzweifel/git-auto-commit-action@v5
+       # with:
+        #  create_branch: true
+         # commit_message: Update version number
 
       - name: Build distribution
         run: |
