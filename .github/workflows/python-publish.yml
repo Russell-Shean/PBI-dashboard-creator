@@ -56,9 +56,9 @@ jobs:
           git tag
 
           # fetch tags locally?
-          git fetch --all --tags --prune
+          # git fetch --all --tags --prune
           
-          git checkout tag/${{ github.event.release.tag_name }}
+          git checkout tags/${{ github.event.release.tag_name }}
           git checkout -b my-tagged-branch
 
           # update version in toml file
