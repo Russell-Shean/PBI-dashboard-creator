@@ -1,5 +1,13 @@
 import re, shutil
 
+import argparse
+
+# commandline args code modified from here: https://stackoverflow.com/a/42929351/16502170
+parser = argparse.ArgumentParser("Update semantic version in pyproject.toml file with the github release tag")
+parser.add_argument("release_tag", help="This should be the release tag provided by githb actions as: ${{ github.event.release.tag_name }}.", type=str)
+args = parser.parse_args()
+
+
 
 with open("./pyproject3.toml", "w") as tmp:
   with open("./pyproject.toml", "r") as file:
@@ -24,7 +32,8 @@ with open("./pyproject3.toml", "w") as tmp:
         print(new_ending_number)
       
 
-        line = re.sub('\\d+"$', str(new_ending_number) + '"', line)
+        #line = re.sub('\\d+"$', str(new_ending_number) + '"', line)
+        line = line.replace(version_match.group(0), args.release_tag)
         print(line)
 
 
