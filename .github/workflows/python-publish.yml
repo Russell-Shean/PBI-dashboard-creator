@@ -42,6 +42,7 @@ jobs:
         run: |
           # NOTE: put your own distribution build steps here.
           # update version number in pyproject.toml
+          # This is the version number : ${{ github.event.release.tag_name }}
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py
           
