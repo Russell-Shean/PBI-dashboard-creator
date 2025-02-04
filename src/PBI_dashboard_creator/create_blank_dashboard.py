@@ -10,8 +10,8 @@ def create_new_dashboard(parent_dir, report_name):
 
 	'''Create a new dashboard in the specified folder
 
-	param str parent_dir: The path to the directory where you want to store the new dashboard
-	param str report_name: Name of the report.
+	:param str parent_dir: The path to the directory where you want to store the new dashboard
+	:param str report_name: Name of the report.
 
 	This function creates a power BI report in the specified parent directory.
 	The dashboard can be opened and edited in Power BI desktop like normal, or be further modified progromatically using other functions in this package. 

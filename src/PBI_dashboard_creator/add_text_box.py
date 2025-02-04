@@ -20,7 +20,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
   :param int z_position: The z index for the visual. (Larger number means more to the front, smaller number means more to the back). Defaults to 6000
   :param int tab_order: The order which the screen reader reads different elements on the page. Defaults to -1001 for now. (I need to do more to figure out what the numbers correpond to. It should also be possible to create a function to automatically order this left to right top to bottom by looping through all the visuals on a page and comparing their x and y positions)
     
-  :param bool text_align: How would you like the text aligned (available options: "left", "right", "center")
+  :param str text_align: How would you like the text aligned (available options: "left", "right", "center")
   :param str font_weight: This is an option to change the font's weight. Defaults to bold. Available options include: ["bold"]
   :param int font_size: The font size in pts. Must be a whole integer. Defaults to 32 pt
   :param str font_color: Hex code for the font color you'd like to use. Defaults to black (#000000) 
