@@ -2,7 +2,7 @@
 This is a python module that can be used to automatically create PowerBI dashboards using the .pbir file type
 [![pypi Version](https://img.shields.io/pypi/v/PBI-dashboard-creator.svg?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/PBI-dashboard-creator/)
 [![PyPi downloads](https://static.pepy.tech/personalized-badge/PBI-dashboard-creator?period=total&units=international_system&left_color=grey&right_color=orange&left_text=pip%20downloads)](https://pypi.org/project/PBI-dashboard-creator/)
-[![Codecov test coverage](https://codecov.io/gh/                 /branch/master/graph/badge.svg)](https://app.codecov.io/gh/        ?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/Russell-Shean/PBI-dashboard-creator/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Russell-Shean/PBI-dashboard-creator?branch=master)
 
 ## prerequisites
 1. python and pip installed and on path
