@@ -4,7 +4,7 @@ Do you wish you could build dashboard with python or R, but can't because the cl
 Introducing Power Bpy, a python package that lets you create Power BI dashboards using functions 💪 instead of the point-and-click interface 🥹. Dashboards created using these functions can be opened, edited and saved normally in Power BI desktop. Currently the package has functions that let you *automatically* 🥳 do the following:     
 - Create a new dashboard
 - Import data from
-- - csv file stored locally 
+  - csv file stored locally 
   - csv file stored in Azure Data Lake Storage (ADLS)
   - Power BI table stored as a Tabular Model Definition Language (TMDL) file
 - Add a page
