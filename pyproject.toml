@@ -1,6 +1,6 @@
 [project]
 name = "PBI_dashboard_creator"
-version = "1.0.75"
+version = "1.0.76"
 authors = [
   { name="Russell Shean", email="russshean@gmail.com" },
 ]
@@ -40,7 +40,7 @@ docs = { script = "sphinx-build clean && sphinx-build -b html docs/ build/" }
 
 # pyproject.toml
 [tool.pytest.ini_options]
-minversion = "6.1"
+minversion = "6.2"
 addopts = "-ra -q"
 testpaths = [
     "tests"
