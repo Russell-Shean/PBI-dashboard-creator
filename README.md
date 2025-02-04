@@ -1,7 +1,10 @@
 # Power Bpy
 Do you wish you could build dashboard with python or R, but can't because the client specifically asked for Power BI or your employer only supports publishing Power BI? Do you love love love Power BI, but wish there was a way to automatically generate parts of your dashboard to speed up your development process?          
 
-Introducing Power Bpy, a python package that lets you create Power BI dashboards using functions 💪 instead of the point-and-click interface 🥹. Dashboards created using these functions can be opened, edited and saved normally in Power BI desktop.        
+Introducing Power Bpy, a python package that lets you create Power BI dashboards using functions 💪 instead of the point-and-click interface 🥹. Dashboards created using these functions can be opened, edited and saved normally in Power BI desktop.       
+
+This package uses the new .pbip/.pbir format with TMDL enabled. This stores dashboards as directories of text files instead of binary files letting you version control your dashboards! 🥳 These features are still preview features, so use this with caution until there's more clarity from microsoft about what they're going to do with .pbir and tmdl.       
+
 [![pypi Version](https://img.shields.io/pypi/v/PBI-dashboard-creator.svg?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/PBI-dashboard-creator/)
 [![PyPI Downloads](https://static.pepy.tech/badge/pbi-dashboard-creator)](https://pepy.tech/projects/pbi-dashboard-creator)
 [![Codecov test coverage](https://codecov.io/gh/Russell-Shean/PBI-dashboard-creator/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Russell-Shean/PBI-dashboard-creator?branch=master)
@@ -28,7 +31,14 @@ Currently the package has functions that let you *automatically* 🥳 do the fol
 Before you can start to build power BI dashboards using this package's functions you'll need the following: 
 1. python and pip installed and on path
 2. git installed and on path
-3. Power BI Desktop (You can create the dashboards without this, but not view them).      
+3. Power BI Desktop (You can create the dashboards without this, but not view them).
+
+Power BI settings:      
+You'll need to enable some preview features in Power BI Desktop. Navigate to `File` > `Options and Settings` > `Options` > `Preview features` and enable the following options:
+1. Shape map visual
+2. Power BI Project (.pbip) save option
+   A. Store Semantic Model using TMDL format
+   B. Store reports using enhanced metadata format (PBIR)
 
 
 # Run the example
