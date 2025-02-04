@@ -77,8 +77,7 @@ jobs:
 
           
    
-      - name: Tag Repo
-        uses: richardsimko/update-tag@v1
+      - uses: richardsimko/update-tag@v1
         with:
           tag_name: ${{ github.event.release.tag_name }}
         env:
