@@ -65,6 +65,9 @@ jobs:
           git checkout tags/${{ github.event.release.tag_name }}
           git checkout -b my-tagged-branch
 
+          # try setting upstream tracking
+          git branch --set-upstream-to=origin/<branch> my-tagged-branch
+
           # update version in toml file
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
