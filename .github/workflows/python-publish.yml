@@ -60,7 +60,7 @@ jobs:
           git tag
 
           # fetch tags locally?
-          # git fetch --all --tags --prune
+          git fetch --all --tags --prune
           
           git checkout tags/${{ github.event.release.tag_name }}
           git checkout -b my-tagged-branch
@@ -69,6 +69,7 @@ jobs:
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
 
+          git pull
           git add .
           git commit -m "update version number in pyproject.toml"
 
