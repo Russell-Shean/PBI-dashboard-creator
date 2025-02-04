@@ -45,7 +45,7 @@ jobs:
           # This is the version number : ${{ github.event.release.tag_name }}
 
           # install dependencies
-          py -m pip install argparse
+          python -m pip install argparse
 
           # update version in toml file
           chmod +x ./.github/scripts/update_toml.py
