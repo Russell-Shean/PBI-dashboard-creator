@@ -116,7 +116,7 @@ If everything worked you should have a dashboard that looks like this:
 ![image](https://github.com/user-attachments/assets/3bdab36e-5fdc-47fc-9ddf-64a69e3fbd21)       
 
 # Next steps
-The code used to generate the dashboard is stored <a href= "https://github.com/Russell-Shean/PBI-dashboard-creator/tree/main/examples">here</a>      
+The code used to generate the dashboard is stored <a href= "https://github.com/Russell-Shean/PBI-dashboard-creator/blob/main/examples/create_example_dashboard.py">here</a>      
 The function documentation is stored <a href="https://pbi-dashboard-creator.readthedocs.io/en/latest/">here</a>       
 
 Try building your own dashboards with these functions and let me know what happens!   
