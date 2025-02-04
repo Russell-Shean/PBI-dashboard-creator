@@ -44,6 +44,10 @@ jobs:
           # update version number in pyproject.toml
           # This is the version number : ${{ github.event.release.tag_name }}
 
+          # specify user and email
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           # install dependencies
           python -m pip install argparse
 
