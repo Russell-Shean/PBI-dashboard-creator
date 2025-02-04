@@ -65,25 +65,20 @@ jobs:
           git checkout tags/${{ github.event.release.tag_name }}
           git checkout -b my-tagged-branch
 
-          # try setting upstream tracking
-          git branch --set-upstream-to=origin/<branch> my-tagged-branch
 
           # update version in toml file
           chmod +x ./.github/scripts/update_toml.py
           python ./.github/scripts/update_toml.py ${{ github.event.release.tag_name }}
 
-          git pull
+          # commit the change
           git add .
           git commit -m "update version number in pyproject.toml"
-
           git push  -u origin my-tagged-branch
 
+          # deal with tag clean up
           git tag -d ${{ github.event.release.tag_name }}
-
           git tag ${{ github.event.release.tag_name }}
-
           git push origin :${{ github.event.release.tag_name }}
-
           git push origin ${{ github.event.release.tag_name }}
 
           
