@@ -552,8 +552,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
 
        # add this measure "Bin 5 Range"
         PBI.add_card(data_source = data_source,
-          measure_name = f"Bin {i + 1} Range"
-        #text = f"{static_bin_breaks[i]} - {static_bin_breaks[i + 1]}", 
+          measure_name = f"Bin {i + 1} Range",
                    dashboard_path = dashboard_path, 
                    page_id = page_id, 
                    text_box_id = f"{map_id}_legend_box{i + 1}", 
