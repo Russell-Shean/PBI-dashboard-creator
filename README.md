@@ -133,7 +133,8 @@ I welcome the following feedback:
 2. I will add a step-by-step explanation/tutorial for the example dashboard
 3. I will deploy to conda
 4. I plan to convert the functions to classes and methods
-5. I will add functions to do the following:
+5. I will add tests and input validation. I doubt this will do anything except prevent malformed dashboard files, but stricter input validation may break some edge case uses. 
+6. I will add functions to do the following:
    - Create a map with a dynamic legend
    - Add cards and slicers
    - list pages
