@@ -3,7 +3,7 @@ import  os, json, re
 def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
  x_position, y_position, z_position = 6000, tab_order=-1001,
  text_align = "left", 
-  font_weight = "bold", font_size=32, font_color="#000000", background_color = None):
+  font_weight = "bold", font_size=32, font_color="#000000", background_color = None, parent_group_id = None):
     
   '''Add a text box to a page
 
@@ -24,7 +24,8 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
   :param str font_weight: This is an option to change the font's weight. Defaults to bold. Available options include: ["bold"]
   :param int font_size: The font size in pts. Must be a whole integer. Defaults to 32 pt
   :param str font_color: Hex code for the font color you'd like to use. Defaults to black (#000000) 
-  :param str background_color: Hex code for the background color of the text box. Defaults to None (transparent) 
+  :param str background_color: Hex code for the background color of the text box. Defaults to None (transparent)
+  :param str parent_group_id: This should be a valid id code for another power BI visual. If supplied the current visual will be nested inside the parent group. 
 
   This function creates a new text box on a page. 
   '''
@@ -118,6 +119,8 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
   }
     }
 
+
+
   # add a background color if the user provided one
   if background_color is not None:
     text_box_json["visual"]["visualContainerObjects"]["background"].append( {
@@ -154,6 +157,10 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
             }
           }
         })
+
+  # add the parent group id if the user supplies one
+  if parent_group_id is not None:
+    card_json["parentGroupName"] = parent_group_id
 
 
 

@@ -155,13 +155,15 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
 
   # If percentile breaks are provided, calculate the associated measures
   if percentile_bin_breaks is not None:
+
+    # add bin measures to the dataset
     PBI._add_bin_measures(dashboard_path = dashboard_path,
-                 dataset_name = "wa_bigfoot_by_county",
-                  color_var = "count", 
-                  percentile_breaks = [0.0,0.2,0.4,0.6,0.8,1], 
-                  color_palette ="asdf",
+                 dataset_name = data_source,
+                  color_var = color_var, 
+                  percentile_bin_breaks = percentile_bin_breaks, 
+                  color_palette = color_palette,
                   filtering_var = "season",
-                  location_var = "county"#,
+                  location_var = location_var
                   #data_filtering_condition = {"metric":"adj_rate"}
                   )   
 
@@ -491,6 +493,34 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
 
     legend_y_position = y_position + height - 17
 
+    legend_height = 34
+
+
+    # create a larger visual element to be the parent for all the legend boxes
+    legend_box_folder = os.path.join(page_folder_path, f"{map_id}_legend_box")
+    legend_box_path = os.path.join(legend_box_folder, "visual.json")
+
+    os.makedirs(legend_box_folder)
+
+    legend_box_json = {
+    "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
+    "name": f"{map_id}_legend_box",
+    "position": {
+    "x": legend_x_position,
+    "y": legend_y_position,
+    "z": 2000,
+    "height": legend_height,
+    "width": legend_width,
+    "tabOrder": -1
+    },
+    "visualGroup": {
+    "displayName": f"{map_id}_legend_box",
+    "groupMode": "ScaleMode"
+    }}
+
+
+    with open(legend_box_json) as file:
+      json.dump(legend_box_json, file, indent = 2)
 
     # Add a text box for each bin and make a legend that way
     # There has got to be a better way to do this ....lol
@@ -502,7 +532,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                    dashboard_path = dashboard_path, 
                    page_id = page_id, 
                    text_box_id = f"{map_id}_legend_box{i + 1}", 
-                   height = 34, 
+                   height = legend_height, 
                    width = box_width,
                    x_position = legend_x_position + box_width * i,
                    y_position = legend_y_position,
@@ -513,10 +543,34 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                    font_weight = "bold",
                     font_size=12, 
                     font_color="#ffffff" , 
-                    background_color = color_palette[i]
+                    background_color = color_palette[i],
+                    parent_group_id = f"{map_id}_legend_box"
                     )
 
       # Add card legends for non-static maps
+      if percentile_bin_breaks is not None:
+
+       # add this measure "Bin 5 Range"
+        PBI.add_card(data_source = data_source,
+          measure_name = f"Bin {i + 1} Range"
+        #text = f"{static_bin_breaks[i]} - {static_bin_breaks[i + 1]}", 
+                   dashboard_path = dashboard_path, 
+                   page_id = page_id, 
+                   text_box_id = f"{map_id}_legend_box{i + 1}", 
+                   height = 34, 
+                   width = box_width,
+                   x_position = legend_x_position + box_width * i,
+                   y_position = legend_y_position,
+                   tab_order = -1,
+
+                   # Make sure that the z index is more than the map's z_index
+                   z_position = z_position + 1,
+                   text_align = "center",
+                   font_weight = "bold",
+                    font_size=12, 
+                    font_color="#ffffff" , 
+                    background_color = color_palette[i],
+                    parent_group_id = f"{map_id}_legend_box")
 
 
 
@@ -533,6 +587,8 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
 
 
 
+percentile_breaks = [0.0,0.2,0.4,0.6,0.8,1]
+color_var = "count"
 
 
 

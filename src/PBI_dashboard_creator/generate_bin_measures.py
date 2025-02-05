@@ -1,7 +1,7 @@
 import os, re, uuid
 import pandas as pd
 
-def _generate_bin_ranges(bin_number, dataset_file_path, percentile_breaks,dataset_name, color_var, location_var, filtering_dax):
+def _generate_bin_ranges(bin_number, dataset_file_path, percentile_bin_breaks,dataset_name, color_var, location_var, filtering_dax):
 
   '''An internal function for creating bins within the add_bin_measures() function
 
@@ -35,30 +35,30 @@ def _generate_bin_ranges(bin_number, dataset_file_path, percentile_breaks,datase
 
     for i in range(0, bin_number):
       if i == 0:
-        file.write(f'\t\t\tVAR perc_{round(percentile_breaks[i] * 100)} =  CALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_breaks[i]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax} )\n')
-        file.write(f'\t\t\tVAR perc_{round(percentile_breaks[i +1] * 100)} = CALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_breaks[i+1]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax}  )\n')
+        file.write(f'\t\t\tVAR perc_{round(percentile_bin_breaks[i] * 100)} =  CALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_bin_breaks[i]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax} )\n')
+        file.write(f'\t\t\tVAR perc_{round(percentile_bin_breaks[i +1] * 100)} = CALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_bin_breaks[i+1]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax}  )\n')
 
       else:
-        file.write(f'\t\t\tVAR perc_{round(percentile_breaks[i +1] * 100)} = CALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_breaks[i+1]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax}  )\n')
+        file.write(f'\t\t\tVAR perc_{round(percentile_bin_breaks[i +1] * 100)} = CALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_bin_breaks[i+1]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax}  )\n')
 
     for i in range(0,bin_number):
 
       if i == 0:
 
-        file.write(f'\t\t\tVAR bin{i +1}_LB = perc_{round(percentile_breaks[i] * 100)}')
-        file.write(f'\t\t\tVAR bin{i +1}_UB = IF ( perc_{round(percentile_breaks[i] * 100)} == perc_{round(percentile_breaks[i+1] * 100)}, bin{i+1}_LB + 0.01, ROUND( perc_{round(percentile_breaks[i+1] * 100)}, 2) )\n')
+        file.write(f'\t\t\tVAR bin{i +1}_LB = perc_{round(percentile_bin_breaks[i] * 100)}')
+        file.write(f'\t\t\tVAR bin{i +1}_UB = IF ( perc_{round(percentile_bin_breaks[i] * 100)} == perc_{round(percentile_bin_breaks[i+1] * 100)}, bin{i+1}_LB + 0.01, ROUND( perc_{round(percentile_bin_breaks[i+1] * 100)}, 2) )\n')
 
 
       else:
         file.write(f'\t\t\tVAR bin{i +1}_LB = bin{i}_UB + 0.01\n' )
-        file.write(f'\t\t\tVAR bin{i+1}_UB = IF ( perc_{round(percentile_breaks[i] * 100)} == perc_{round(percentile_breaks[i + 1] * 100)} || perc_{round(percentile_breaks[i + 1] * 100)} <= bin{i + 1}_LB, bin{i+1}_LB + 0.01, ROUND( perc_{round(percentile_breaks[i + 1] * 100)}, 2) )\n')
+        file.write(f'\t\t\tVAR bin{i+1}_UB = IF ( perc_{round(percentile_bin_breaks[i] * 100)} == perc_{round(percentile_bin_breaks[i + 1] * 100)} || perc_{round(percentile_bin_breaks[i + 1] * 100)} <= bin{i + 1}_LB, bin{i+1}_LB + 0.01, ROUND( perc_{round(percentile_bin_breaks[i + 1] * 100)}, 2) )\n')
 
     file.write(f"\t\t\tRETURN\n")
     file.write(f'\t\t\tbin{bin_number}_LB & "-" & bin{bin_number}_UB\n')
     file.write(f'\t\tlineageTag: {str(uuid.uuid4())}\n')
 
 
-def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks, color_palette, filtering_var,location_var, data_filtering_condition = None):
+def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_bin_breaks, color_palette, filtering_var,location_var, data_filtering_condition = None):
 
   '''An internally called function that creates a TMDL file from a pandas dataframe
 
@@ -78,8 +78,8 @@ def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks,
   '''
 
   # checks 
-  if max(percentile_breaks) > 1 or min(percentile_breaks) < 0:
-    raise ValueError("Sorry the percentile_breaks should express decimal percentiles between 0 and 1. For example the 20th percentile should be written as 0.2")
+  if max(percentile_bin_breaks) > 1 or min(percentile_bin_breaks) < 0:
+    raise ValueError("Sorry the percentile_bin_breaks should express decimal percentiles between 0 and 1. For example the 20th percentile should be written as 0.2")
 
   # If a data_filtering_condition argument was provided, make sure it's a dictionary with only a single key-value pair
   if data_filtering_condition is not None:
@@ -150,7 +150,7 @@ def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks,
     # start adding quintiles
     file.write("\tmeasure 'Bin Assignment Measure' = ```\n\n")
 
-    for percentile in percentile_breaks:
+    for percentile in percentile_bin_breaks:
       file.write(f"\t\t VAR perc_{round(percentile * 100)} = \n")
       file.write(f'\t\t\t\tCALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax} )\n')
 
@@ -188,14 +188,14 @@ def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks,
       with only a few lines of code.....
 
     '''
-    for i in range(0, len(percentile_breaks)):
+    for i in range(0, len(percentile_bin_breaks)):
       if i == 0:
-        file.write(f'\t\t\tVAR bin{i + 1}_LB = perc_{round(percentile_breaks[i] * 100)}\n')
-        file.write(f'\t\t\tVAR bin{i + 1}_UB = IF ( perc_{round(percentile_breaks[i] * 100)} == perc_{round(percentile_breaks[i + 1] * 100)}, bin{i +1}_LB + 0.01, perc_{round(percentile_breaks[i + 1] * 100)})\n')
+        file.write(f'\t\t\tVAR bin{i + 1}_LB = perc_{round(percentile_bin_breaks[i] * 100)}\n')
+        file.write(f'\t\t\tVAR bin{i + 1}_UB = IF ( perc_{round(percentile_bin_breaks[i] * 100)} == perc_{round(percentile_bin_breaks[i + 1] * 100)}, bin{i +1}_LB + 0.01, perc_{round(percentile_bin_breaks[i + 1] * 100)})\n')
 
-      elif i < (len(percentile_breaks) -1):
+      elif i < (len(percentile_bin_breaks) -1):
         file.write(f'\t\t\tVAR bin{i + 1}_LB = bin{i}_UB + 0.01\n')
-        file.write(f'\t\t\tVAR bin{i + 1}_UB = IF ( perc_{round(percentile_breaks[i] * 100)} == perc_{round(percentile_breaks[i + 1] * 100)} || perc_{round(percentile_breaks[i + 1] * 100)} <= bin{i+1}_LB, bin{i+1}_LB + 0.01, perc_{round(percentile_breaks[i + 1] * 100)} )\n')
+        file.write(f'\t\t\tVAR bin{i + 1}_UB = IF ( perc_{round(percentile_bin_breaks[i] * 100)} == perc_{round(percentile_bin_breaks[i + 1] * 100)} || perc_{round(percentile_bin_breaks[i + 1] * 100)} <= bin{i+1}_LB, bin{i+1}_LB + 0.01, perc_{round(percentile_bin_breaks[i + 1] * 100)} )\n')
 
     file.write("\t\t\tRETURN\n\n")
 
@@ -213,14 +213,14 @@ def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks,
     file.write("\t\t\t\t\tTRUE (),\n")
     file.write("\t\t\t\t\tISBLANK([Measure Value]), 0,\n")
 
-    for i in range(0, len(percentile_breaks)):
+    for i in range(0, len(percentile_bin_breaks)):
 
       # make sure we have n -1 bins
-      if i < (len(percentile_breaks) -1):
+      if i < (len(percentile_bin_breaks) -1):
         file.write(f"\t\t\t\t\t[Measure Value] >= ROUND(bin{i+1}_LB,2) &&\n")
 
         # Make sure the last line doesn't end with a comma
-        if i < (len(percentile_breaks) -2):
+        if i < (len(percentile_bin_breaks) -2):
           file.write(f"\t\t\t\t\t[Measure Value] <= ROUND(bin{i+1}_UB,2), {i +1},\n")
         else:
           file.write(f"\t\t\t\t\t[Measure Value] <= ROUND(bin{i+1}_UB,2), {i +1}\n")
@@ -237,9 +237,9 @@ def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks,
     '''
     # Generate bin ranges for each of the different bins we've been defining
     # see function definition above
-    for i in range(1,len(percentile_breaks)):
+    for i in range(1,len(percentile_bin_breaks)):
       _generate_bin_ranges(i,
-                           percentile_breaks = percentile_breaks, 
+                           percentile_bin_breaks = percentile_bin_breaks, 
                            dataset_file_path = dataset_file_path, 
                            dataset_name = dataset_name,
                            color_var = color_var,
@@ -253,9 +253,9 @@ def add_bin_measures(dashboard_path, dataset_name, color_var, percentile_breaks,
 
 
     # Create measures for percentiles
-    for i in range(1, len(percentile_breaks)):
-      file.write(f"\tmeasure '{round(percentile_breaks[i] * 100)} percentile' = ```\n\n")
-      file.write(f'\t\t\t\tCALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_breaks[i]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax}  )\n\t\t\t```\n')
+    for i in range(1, len(percentile_bin_breaks)):
+      file.write(f"\tmeasure '{round(percentile_bin_breaks[i] * 100)} percentile' = ```\n\n")
+      file.write(f'\t\t\t\tCALCULATE ( PERCENTILE.INC ({dataset_name}[{color_var}], {percentile_bin_breaks[i]} ), REMOVEFILTERS({dataset_name}[{location_var}]){filtering_dax}  )\n\t\t\t```\n')
       file.write(f"\t\tlineageTag: {str(uuid.uuid4())}\n\n")
       file.write('\t\tannotation PBI_FormatHint = {"isGeneralNumber":true}\n\n')
 
