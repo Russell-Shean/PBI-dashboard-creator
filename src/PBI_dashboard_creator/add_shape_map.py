@@ -6,9 +6,9 @@ import  os, json, re, shutil
 import PBI_dashboard_creator as PBI
 
 def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
- map_title, location_var, color_var, color_breaks, color_palette, 
+ map_title, location_var, color_var, color_palette, 
  height, width,
- x_position, y_position, add_legend = True, z_position = 6000, tab_order=-1001):
+ x_position, y_position, add_legend = True, static_bin_breaks = None, percentile_bin_breaks = None, z_position = 6000, tab_order=-1001):
     
   '''Add a map to a page
 
@@ -22,9 +22,11 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   :param str map_title: The title you want to put above the map.
   :param str location_var: The name of the column in data_source that you want to use for the location variable on the map
   :param str color_var: The name of the column in data_source that you want to use for the color variable on the map
-  :param list color_breaks: This should be a list of numbers that you want to use to create bins in your data. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. The function will create bins between the first and second number, second and third, third and fourth, etc. 
-  :param list color_palatte: A list of hex codes to use to color your data. There should be one fewer than the number of entries in color_breaks
+  :param list static_bin_breaks: This should be a list of numbers that you want to use to create bins in your data. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. The function will create bins between the first and second number, second and third, third and fourth, etc. 
+  :param list color_palatte: A list of hex codes to use to color your data. There should be one fewer than the number of entries in static_bin_breaks
   :param bool add_legend: True or False, would you like to add the default legend? (By default legend, I mean this function's default, not the Power BI default)
+  :param list static_bin_breaks: This should be a list of numbers that you want to use to create bins in your data. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. The function will create bins between the first and second number, second and third, third and fourth, etc. 
+  :param list percentile_bin_breaks: This should be a list of percentiles between 0 and 1 that you want to us to create bins in your data. This will create power BI measures that dynamically update when the data is filtered by things such as slicers. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. Here's an example use case: to create 5 equal sized bins pass this list: [0,0.2,0.4,0.6,0.8,1]
 
   :param int height: Height of map on the page
   :param int width: Width of map on the page
@@ -42,15 +44,32 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   '''
 
   # checks --------------------------------------------------------------------------------------------------------------
-  if type(color_breaks) is not list: 
-    raise TypeError("color_breaks should be a list! Please pass a list of numbers")
-
   if type(color_palette) is not list: 
-    raise TypeError("color_palette should be a list! Please pass a list of hex codes")
+        raise TypeError("color_palette should be a list! Please pass a list of hex codes")
 
-  if len(color_breaks) - len(color_palette) != 1:
-    raise ValueError("There should be one fewer colors than number of color_breaks! Please make sure you specified one more break than the number of bins you want.")
+  if add_legend is True:
+    if percentile_bin_breaks is None and static_bin_breaks is None:
+      raise ValueError("If you want to add a legend to the map with this function you'll need to provide either static_bin_breaks or percentile_bin_breaks. To not add a legend set add_legend = False")
 
+
+    if percentile_bin_breaks is not None and static_bin_breaks is not None:
+      raise ValueError("You can't add static and percentile bins to the same map! Please only provide either static_bin_breaks OR percentile_bin_breaks")
+
+    if static_bin_breaks is not None:
+
+      if type(static_bin_breaks) is not list: 
+        raise TypeError("static_bin_breaks should be a list! Please pass a list of numbers")
+
+      if len(static_bin_breaks) - len(color_palette) != 1:
+        raise ValueError("There should be one fewer colors than number of static_bin_breaks! Please make sure you specified one more break than the number of bins you want.")
+
+    if percentile_bin_breaks is not None:
+
+      if type(percentile_bin_breaks) is not list: 
+        raise TypeError("percentile_bin_breaks should be a list! Please pass a list of numbers")
+
+      if len(percentile_bin_breaks) - len(color_palette) != 1:
+        raise ValueError("There should be one fewer colors than number of percentile_bin_breaks! Please make sure you specified one more break than the number of bins you want.")
 
 
   # hex code
@@ -98,30 +117,30 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
     os.makedirs(new_visual_folder)
 
 
-  # Upload image to dashboard's registered resources ---------------------------------------------------
+  # Upload shape file to dashboard's registered resources ---------------------------------------------------
 
   # create registered resources folder if it doesn't exist
   if not os.path.exists(registered_resources_folder):
     os.makedirs(registered_resources_folder)
 
-  # move image to registered resources folder
+  # move shape file to registered resources folder
   shutil.copy(shape_file_path, registered_shape_path)
 
 
 
-  # add new registered resource (the image) to report.json ----------------------------------------------
+  # add new registered resource (the shape file) to report.json ----------------------------------------------
   with open(report_json_path,'r') as file:
     report_json = json.load(file)
 
 
-  # add the image as an item to the registered resources items list
+  # add the shape file as an item to the registered resources items list
   for dict in report_json["resourcePackages"]:
     if dict["name"] == "RegisteredResources":
       dict["items"].append(
                           {
                                     "name": shape_name,
                                     "path": shape_name,
-                                    "type": "Image"
+                                    "type": "ShapeMap"
                                    }   
                               )
 
@@ -132,8 +151,23 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   # write to file
   with open(report_json_path,'w') as file:
     json.dump(report_json, file, indent = 2)
-        
-        
+
+
+  # If percentile breaks are provided, calculate the associated measures
+  if percentile_bin_breaks is not None:
+    PBI._add_bin_measures(dashboard_path = dashboard_path,
+                 dataset_name = "wa_bigfoot_by_county",
+                  color_var = "count", 
+                  percentile_breaks = [0.0,0.2,0.4,0.6,0.8,1], 
+                  color_palette ="asdf",
+                  filtering_var = "season",
+                  location_var = "county"#,
+                  #data_filtering_condition = {"metric":"adj_rate"}
+                  )   
+
+
+  # Create the json that defines the map --------------------------------------------------------------   
+
   map_json = {
     "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
     "name": map_id,
@@ -270,10 +304,8 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
     }
   }
 
+
   
-
-
-
   # Add color bins ----------------------------------------------------------
   # create a color scheme json object
   color_scheme = {
@@ -301,10 +333,13 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
             }
           }
 
-  # add each individual color rule
-  # loop through the color_palette and color_breaks to create separate dictionaries for each color bin
-  for i in range(0,len(color_palette)):
-    color_scheme["properties"]["fill"]["solid"]["color"]["expr"]["Conditional"]["Cases"].append(
+
+  if static_bin_breaks is not None:
+
+    # add each individual color rule
+    # loop through the color_palette and static_bin_breaks to create separate dictionaries for each color bin
+    for i in range(0,len(color_palette)):
+      color_scheme["properties"]["fill"]["solid"]["color"]["expr"]["Conditional"]["Cases"].append(
 
     {
       "Condition": {
@@ -329,7 +364,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
               },
               "Right": {
                 "Literal": {
-                  "Value": f"{color_breaks[i]}D"
+                  "Value": f"{static_bin_breaks[i]}D"
                 }
               }
             }
@@ -354,7 +389,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
               },
               "Right": {
                 "Literal": {
-                  "Value": f"{color_breaks[i + 1]}D"
+                  "Value": f"{static_bin_breaks[i + 1]}D"
                 }
               }
             }
@@ -368,7 +403,79 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
       }
     })
 
+
+  # Else condition: They provided prcentile bins
+  if percentile_bin_breaks is not None:
+    # add each individual color rule
+    # loop through the color_palette and static_bin_breaks to create separate dictionaries for each color bin
+    for i in range(0,len(color_palette)):
+      color_scheme["properties"]["fill"]["solid"]["color"]["expr"]["Conditional"]["Cases"].append(   
+
+        {
+                    "Condition": {
+                      "Comparison": {
+                        "ComparisonKind": 0,
+                        "Left": {
+                          "Measure": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Entity": "Data"
+                              }
+                            },
+                            "Property": "Bin Assignment Measure"
+                          }
+                        },
+                        "Right": {
+                          "Literal": {
+                            "Value": f"{i +1}D"
+                          }
+                        }
+                      }
+                    },
+                    "Value": {
+                      "Literal": {
+                        "Value": f"'{color_palette[i]}'"
+                      }
+                    }
+                  },)
+
+
+    # Add in the missing data color and condition
+    color_scheme["properties"]["fill"]["solid"]["color"]["expr"]["Conditional"]["Cases"].append(    {
+                    "Condition": {
+                      "Comparison": {
+                        "ComparisonKind": 0,
+                        "Left": {
+                          "Measure": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Entity": "Data"
+                              }
+                            },
+                            "Property": "Bin Assignment Measure"
+                          }
+                        },
+                        "Right": {
+                          "Literal": {
+                            "Value": "0D"
+                          }
+                        }
+                      }
+                    },
+                    "Value": {
+                      "Literal": {
+                        "Value": "'#808080'"
+                      }
+                    }
+                  } )
+
+
+
+
+
   map_json["visual"]["objects"]["dataPoint"].append(color_scheme)
+
+
 
   if add_legend:
 
@@ -388,7 +495,10 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
     # Add a text box for each bin and make a legend that way
     # There has got to be a better way to do this ....lol
     for i in range(0, len(color_palette)):
-      PBI.add_text_box(text = f"{color_breaks[i]} - {color_breaks[i + 1]}", 
+
+      # add text box legends for static maps
+      if static_bin_breaks is not None:
+        PBI.add_text_box(text = f"{static_bin_breaks[i]} - {static_bin_breaks[i + 1]}", 
                    dashboard_path = dashboard_path, 
                    page_id = page_id, 
                    text_box_id = f"{map_id}_legend_box{i + 1}", 
@@ -405,6 +515,9 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                     font_color="#ffffff" , 
                     background_color = color_palette[i]
                     )
+
+      # Add card legends for non-static maps
+
 
 
 
