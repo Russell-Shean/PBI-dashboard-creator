@@ -160,7 +160,7 @@ def add_text_box(text, dashboard_path, page_id, text_box_id, height, width,
 
   # add the parent group id if the user supplies one
   if parent_group_id is not None:
-    card_json["parentGroupName"] = parent_group_id
+    text_box_json["parentGroupName"] = parent_group_id
 
 
 

@@ -1,6 +1,6 @@
 import os, json
 
-import PBI_dashboard_creator.add_text_box as PBI_text_box
+import PBI_dashboard_creator as PBI
 
 
 def add_new_page(dashboard_path, page_name, title = None, subtitle = None):
@@ -63,7 +63,7 @@ def add_new_page(dashboard_path, page_name, title = None, subtitle = None):
 
 	# Add title and subtitle if requested 
 	if title is not None:
-		PBI_text_box.add_text_box(text = title,
+		PBI.add_text_box(text = title,
              dashboard_path= dashboard_path,
                page_id= new_page_id,
                  text_box_id= f"{new_page_id}_title", 
@@ -73,7 +73,7 @@ def add_new_page(dashboard_path, page_name, title = None, subtitle = None):
                      y_position = 44)
 
 	if subtitle is not None:
-		PBI_text_box.add_text_box(text = subtitle,
+		PBI.add_text_box(text = subtitle,
              dashboard_path= dashboard_path,
                page_id= new_page_id,
                  text_box_id= f"{new_page_id}_subtitle", 

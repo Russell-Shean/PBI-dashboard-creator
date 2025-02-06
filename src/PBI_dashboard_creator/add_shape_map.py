@@ -1,14 +1,18 @@
 
 #### --------------------------------------------------------------------------------------------------------------------------------------
 
-import  os, json, re, shutil
+import  os, json, re, shutil, uuid
 
 import PBI_dashboard_creator as PBI
 
 def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
  map_title, location_var, color_var, color_palette, 
  height, width,
- x_position, y_position, add_legend = True, static_bin_breaks = None, percentile_bin_breaks = None, z_position = 6000, tab_order=-1001):
+ x_position, y_position, 
+ add_legend = True, static_bin_breaks = None, percentile_bin_breaks = None, 
+ filtering_var = None,
+
+ z_position = 6000, tab_order=-1001):
     
   '''Add a map to a page
 
@@ -22,11 +26,14 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   :param str map_title: The title you want to put above the map.
   :param str location_var: The name of the column in data_source that you want to use for the location variable on the map
   :param str color_var: The name of the column in data_source that you want to use for the color variable on the map
-  :param list static_bin_breaks: This should be a list of numbers that you want to use to create bins in your data. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. The function will create bins between the first and second number, second and third, third and fourth, etc. 
+  :param str filtering_var: Optional. The name of a column in data source that you want to use to filter the color variable on the map. This must be supplied if providing percentile_bin_breaks. If you want to use percentiles without filtering (ie on static data), you should calculate the percentiles yourself and pass them to static_bin_breaks. Do not provide both static_bin_breaks and a filtering_var. 
+
+
+  :param list static_bin_breaks: This should be a list of numbers that you want to use to create bins in your data. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. The function will create bins between the first and second number, second and third, third and fourth, etc. A filtering_var cannot be provided if static_bin_breaks is provided. Use percentile bin breaks instead. 
   :param list color_palatte: A list of hex codes to use to color your data. There should be one fewer than the number of entries in static_bin_breaks
   :param bool add_legend: True or False, would you like to add the default legend? (By default legend, I mean this function's default, not the Power BI default)
   :param list static_bin_breaks: This should be a list of numbers that you want to use to create bins in your data. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. The function will create bins between the first and second number, second and third, third and fourth, etc. 
-  :param list percentile_bin_breaks: This should be a list of percentiles between 0 and 1 that you want to us to create bins in your data. This will create power BI measures that dynamically update when the data is filtered by things such as slicers. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. Here's an example use case: to create 5 equal sized bins pass this list: [0,0.2,0.4,0.6,0.8,1]
+  :param list percentile_bin_breaks: This should be a list of percentiles between 0 and 1 that you want to us to create bins in your data. If provided, a filtering_var must also be provided. This will create power BI measures that dynamically update when the data is filtered by things such as slicers. There should be one more entry in the list than the number of bins you want and therefore the number of colors passed to the color_palette argument. Here's an example use case: to create 5 equal sized bins pass this list: [0,0.2,0.4,0.6,0.8,1]
 
   :param int height: Height of map on the page
   :param int width: Width of map on the page
@@ -47,13 +54,21 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   if type(color_palette) is not list: 
         raise TypeError("color_palette should be a list! Please pass a list of hex codes")
 
-  if add_legend is True:
-    if percentile_bin_breaks is None and static_bin_breaks is None:
-      raise ValueError("If you want to add a legend to the map with this function you'll need to provide either static_bin_breaks or percentile_bin_breaks. To not add a legend set add_legend = False")
+
+  if percentile_bin_breaks is not None and filtering_var is None:
+    raise ValueError("You must provide a filtering_var when using percentile_bin_breaks. If you want percentile breaks on static data, calculate percentiles in python and then pass them to static_bin_breaks")
+
+  if percentile_bin_breaks is None and filtering_var is not None:
+    raise ValueError("You can't provide a filtering_var if percentile_bin_breaks is not provided")
 
 
-    if percentile_bin_breaks is not None and static_bin_breaks is not None:
-      raise ValueError("You can't add static and percentile bins to the same map! Please only provide either static_bin_breaks OR percentile_bin_breaks")
+
+  if percentile_bin_breaks is None and static_bin_breaks is None:
+      raise ValueError("You'll need to provide either static_bin_breaks or percentile_bin_breaks. Otherwise Power BI won't know how to color the map")
+
+
+  if percentile_bin_breaks is not None and static_bin_breaks is not None:
+    raise ValueError("You can't add static and percentile bins to the same map! Please only provide either static_bin_breaks OR percentile_bin_breaks")
 
     if static_bin_breaks is not None:
 
@@ -157,7 +172,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   if percentile_bin_breaks is not None:
 
     # add bin measures to the dataset
-    PBI._add_bin_measures(dashboard_path = dashboard_path,
+    PBI.add_bin_measures(dashboard_path = dashboard_path,
                  dataset_name = data_source,
                   color_var = color_var, 
                   percentile_bin_breaks = percentile_bin_breaks, 
@@ -166,6 +181,11 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                   location_var = location_var
                   #data_filtering_condition = {"metric":"adj_rate"}
                   )   
+
+
+    # shift x position to the right the width of the slicer
+    # to make room for the slicer
+    x_position = x_position + 160
 
 
   # Create the json that defines the map --------------------------------------------------------------   
@@ -421,7 +441,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                           "Measure": {
                             "Expression": {
                               "SourceRef": {
-                                "Entity": "Data"
+                                "Entity": data_source
                               }
                             },
                             "Property": "Bin Assignment Measure"
@@ -451,7 +471,7 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                           "Measure": {
                             "Expression": {
                               "SourceRef": {
-                                "Entity": "Data"
+                                "Entity": data_source
                               }
                             },
                             "Property": "Bin Assignment Measure"
@@ -478,6 +498,29 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
   map_json["visual"]["objects"]["dataPoint"].append(color_scheme)
 
 
+  # add a slicer ----------------------------------------------------------
+  if percentile_bin_breaks is not None:
+    PBI.add_slicer(dashboard_path = dashboard_path,
+               data_source = data_source,
+               column_name = filtering_var,
+               page_id = "page3", 
+               slicer_id = f"{filtering_var}_slicer", 
+               height = height, 
+               width = 160,
+
+               # subtract this back from the 160 we added at the beginning
+               x_position = x_position - 160,
+               y_position = y_position)
+
+
+
+
+
+
+
+  # add a legend ----------------------------------------------------------------------------------------------------------------------
+
+
 
   if add_legend:
 
@@ -495,32 +538,37 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
 
     legend_height = 34
 
-
+    
     # create a larger visual element to be the parent for all the legend boxes
-    legend_box_folder = os.path.join(page_folder_path, f"{map_id}_legend_box")
+    legend_box_folder = os.path.join(visuals_folder, f"{map_id}_legend_box")
     legend_box_path = os.path.join(legend_box_folder, "visual.json")
 
     os.makedirs(legend_box_folder)
 
+    #legend_box_uuid = str(uuid.uuid4())
+
     legend_box_json = {
     "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.3.0/schema.json",
-    "name": f"{map_id}_legend_box",
+    "name":f"{map_id}_legend_box",     #legend_box_uuid,                             # f"{map_id}_legend_box",
     "position": {
     "x": legend_x_position,
     "y": legend_y_position,
-    "z": 2000,
+    "z": z_position + 1000,
     "height": legend_height,
     "width": legend_width,
     "tabOrder": -1
     },
     "visualGroup": {
-    "displayName": f"{map_id}_legend_box",
+    "displayName":    "Bins",    #f"{map_id}_legend_box",
     "groupMode": "ScaleMode"
     }}
 
 
-    with open(legend_box_json) as file:
+    with open(legend_box_path, "w") as file:
       json.dump(legend_box_json, file, indent = 2)
+
+
+    
 
     # Add a text box for each bin and make a legend that way
     # There has got to be a better way to do this ....lol
@@ -534,17 +582,23 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
                    text_box_id = f"{map_id}_legend_box{i + 1}", 
                    height = legend_height, 
                    width = box_width,
-                   x_position = legend_x_position + box_width * i,
-                   y_position = legend_y_position,
+
+                   # Soooo... this is relative to the outer group
+                   # NOT the page!
+                   # so needs to be y = 0 and x + n box widths
+                   x_position = 0 + box_width * i,
+                   y_position = 0,
 
                    # Make sure that the z index is more than the map's z_index
-                   z_position = z_position + 1,
+                   z_position =  z_position + 2000,      #z_position + 1,
                    text_align = "center",
                    font_weight = "bold",
                     font_size=12, 
                     font_color="#ffffff" , 
                     background_color = color_palette[i],
+                    #parent_group_id = None
                     parent_group_id = f"{map_id}_legend_box"
+                    # parent_group_id = legend_box_uuid
                     )
 
       # Add card legends for non-static maps
@@ -555,15 +609,15 @@ def add_shape_map(dashboard_path, page_id, map_id, data_source, shape_file_path,
           measure_name = f"Bin {i + 1} Range",
                    dashboard_path = dashboard_path, 
                    page_id = page_id, 
-                   text_box_id = f"{map_id}_legend_box{i + 1}", 
+                   card_id = f"{map_id}_legend_box{i + 1}", 
                    height = 34, 
                    width = box_width,
-                   x_position = legend_x_position + box_width * i,
-                   y_position = legend_y_position,
+                   x_position = 0 + box_width * i,
+                   y_position = 0,
                    tab_order = -1,
 
                    # Make sure that the z index is more than the map's z_index
-                   z_position = z_position + 1,
+                   z_position = 0,         #z_position + 1,
                    text_align = "center",
                    font_weight = "bold",
                     font_size=12, 
