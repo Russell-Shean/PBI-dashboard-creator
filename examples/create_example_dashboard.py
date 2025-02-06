@@ -22,18 +22,6 @@ PBI.add_csv(dashboard_path, os.path.join(report_location, "PBI_dashboard_creator
 # add the default DateTable to the dashboard 
 PBI.add_tmdl_dataset(dashboard_path = dashboard_path, data_path = None, add_default_datetable = True)
 
-# add a csv file stored in ADLS
-
-try:
-	PBI.add_csv_from_blob(dashboard_path, 
-	                           account_url = "https://sadohpowerbi.blob.core.windows.net",  
-	                           blob_name = "test",
-	                           data_path = "wa_wolfs.csv",
-	                           tenant_id = "11d0e217-264e-400a-8ba0-57dcc127d72d",
-	                           use_saved_storage_key = False)
-
-except:
-	print("Uh oh! Looks like you don't hav access to this azure tenant or something else went wrong. Skipping the add data from azure step!")
 
 
 # add new page -----------------------------------------------------------------------------------------------------
@@ -125,19 +113,24 @@ PBI.add_shape_map(dashboard_path = dashboard_path,
               page_id = "page3",
               map_id = "bigfoots_by_county_map",
               data_source = "wa_bigfoot_by_county",
-              shape_file_path = "./PBI_dashboard_creator/examples/data/2019_53_WA_Counties9467365124727016.json",
+              shape_file_path = "C:/Users/rps1303/Downloads/2019_53_WA_Counties9467365124727016.json",
+              
               map_title = "Washington State Bigfoot Sightings by County",
+              #map_title = "",
               location_var = "county",
               color_var = "count",
-              color_breaks = [0, 15.4, 30.8, 46.2, 61.6, 77.0],
-              color_palette = ["#a1343c", "#de6a73", "#e68f96", "#efb5b9", "#6b2328"],
+              filtering_var = "season",
+              #static_bin_breaks = [0, 15.4, 30.8, 46.2, 61.6, 77.0],
+              percentile_bin_breaks = [0,0.2,0.4,0.6,0.8,1],
+              color_palette = ["#efb5b9",  "#e68f96","#de6a73","#a1343c", "#6b2328"],
               height = 534,
               width = 816,
               x_position = 75,
-              y_position = 132
-
+              y_position = 132,
+              z_position = 2000,
+              add_legend = True
+              #add_legend = False
               )
-
 
 
 
