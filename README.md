@@ -1,5 +1,6 @@
-# Power Bpy
-Do you wish you could build dashboard with python or R, but can't because the client specifically asked for Power BI or your employer only supports publishing Power BI? Do you love love love Power BI, but wish there was a way to automatically generate parts of your dashboard to speed up your development process?          
+# Power Bpy <a href="https://pbi-dashboard-creator.readthedocs.io/en/latest/PBI_dashboard_creator.html"><img src="https://github.com/user-attachments/assets/e372239d-5c28-4ed1-acf6-fb96a03b8a1a" align="right" height="240" /></a>  
+Do you wish you could build dashboard with python or R, but can't because the client specifically asked for Power BI or your employer only supports publishing Power BI? Do you love love love Power BI, but wish there was a way to automatically generate parts of your dashboard to speed up your development process?      
+
 
 Introducing Power Bpy, a python package that lets you create Power BI dashboards using functions 💪 instead of the point-and-click interface 🥹. Dashboards created using these functions can be opened, edited and saved normally in Power BI desktop.       
 
